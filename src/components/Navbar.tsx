@@ -14,7 +14,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from 'react-router-dom'; // Importa Link para la navegación
 import RegisterDialog from './RegisterDialog';
 import LoginDialog from './LoginDialog';
-
 interface NavItem {
   label: string;
   path: string;
@@ -55,9 +54,7 @@ const Navbar: React.FC = () => {
     <>
     
     <RegisterDialog open={viewRegisterDialog} onClose={() => setViewRegisterDialog(false)}
-     onSubmit={function (userData: any): void {
-        throw new Error('Function not implemented.');
-      } } />
+     onSubmit={ () => null } />
       <LoginDialog open={viewLoginDialog} onClose={ () => setViewLoginDialog(false) }
        onSubmit={function (userData: { email: string; password: string; }): void {
         throw new Error('Function not implemented.');

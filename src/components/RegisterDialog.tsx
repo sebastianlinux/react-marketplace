@@ -13,17 +13,22 @@ import {
   FormControl,
   SelectChangeEvent,
   Typography,
+  Box,
 } from "@mui/material";
+import CircularProgress from '@mui/material/CircularProgress';
+
+import APIService from "services/Api";
+import Notify from "./Notify";
+import { ToastContainer } from "react-toastify";
 
 interface RegisterDialogProps {
   open: boolean;
   onClose: () => void;
   onSubmit: (userData: {
-    username: string;
+    name: string;
     email: string;
     password: string;
-    confirmPassword: string;
-    userType: string;
+    role: string;
   }) => void;
 }
 
@@ -33,29 +38,29 @@ const RegisterDialog: React.FC<RegisterDialogProps> = ({
   onSubmit,
 }) => {
   const [formData, setFormData] = useState({
-    username: "",
+    name: "",
     email: "",
     password: "",
     confirmPassword: "",
-    userType: "",
+    role: "",
   });
   const [errors, setErrors] = useState({} as any);
-
+  const [loading, setLoading] = useState<boolean>(false)
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
     setErrors({ ...errors, [event.target.name]: "" });
   };
 
   const handleSelectChange = (event: SelectChangeEvent<string>) => {
-    setFormData({ ...formData, userType: event.target.value }); // Acceso directo a event.target.value
-    setErrors({ ...errors, userType: "" });
+    setFormData({ ...formData, role: event.target.value }); // Acceso directo a event.target.value
+    setErrors({ ...errors, role: "" });
   };
 
   const validateForm = () => {
     let newErrors: any = {};
 
-    if (!formData.username) {
-      newErrors.username = "El nombre completo es requerido";
+    if (!formData.name) {
+      newErrors.name = "El nombre completo es requerido";
     }
 
     if (!formData.email) {
@@ -76,138 +81,170 @@ const RegisterDialog: React.FC<RegisterDialogProps> = ({
       newErrors.confirmPassword = "Las contraseñas no coinciden";
     }
 
-    if (!formData.userType) {
-      newErrors.userType = "Debe seleccionar un tipo de usuario";
+    if (!formData.role) {
+      newErrors.role = "Debe seleccionar un tipo de usuario";
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
     if (validateForm()) {
+      setLoading(true)
+      const dataToSend:any = {
+        ...formData
+      }
+      delete dataToSend.confirmPassword
+      const res = await APIService.userRegister({...dataToSend})
       onSubmit(formData);
+      if(res.status){
       handleClose();
-      setFormData({
-        username: "",
+      Notify('Registro exitoso','success')
+       setFormData({
+        name: "",
         email: "",
         password: "",
         confirmPassword: "",
-        userType: "",
+        role: "",
       });
+      }else{
+        Notify(res.message,'error')
+      }
+      console.log('RESPUESTA',res)
       setErrors({});
+      setLoading(false)
     }
   };
 
   const handleClose = () => {
     onClose();
     setFormData({
-      username: "",
+      name: "",
       email: "",
       password: "",
       confirmPassword: "",
-      userType: "",
+      role: "",
     });
     setErrors({});
   };
 
   return (
-    <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Registro de usuario</DialogTitle>
-      <DialogContent>
-        <Grid container spacing={2} sx={{ mt: 2 }}>
-          {/* Selector de tipo de usuario */}
-          <Grid item xs={12}>
-            <FormControl fullWidth>
-              <InputLabel id="user-type-label">Tipo de usuario</InputLabel>
-              <Select
-                labelId="user-type-label"
-                id="userType"
-                name="userType"
-                value={formData.userType}
-                label="Tipo de usuario"
-                onChange={handleSelectChange}
-                error={!!errors.userType}
-              >
-                <MenuItem value="comprador">Comprador</MenuItem>
-                <MenuItem value="vendedor">Vendedor</MenuItem>
-              </Select>
-              {errors.userType && (
-                <Typography variant="caption" color="error">
-                  {errors.userType}
-                </Typography>
-              )}
-            </FormControl>
+    <>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Registro de usuario</DialogTitle>
+        <DialogContent>
+          <Grid container spacing={2} sx={{ mt: 2 }}>
+            {/* Selector de tipo de usuario */}
+            <Grid item xs={12}>
+              <FormControl fullWidth>
+                <InputLabel id="user-type-label">Tipo de usuario</InputLabel>
+                <Select
+                  labelId="user-type-label"
+                  id="role"
+                  name="role"
+                  value={formData.role}
+                  label="Tipo de usuario"
+                  onChange={handleSelectChange}
+                  error={!!errors.role}
+                >
+                  <MenuItem value="comprador">Comprador</MenuItem>
+                  <MenuItem value="vendedor">Vendedor</MenuItem>
+                </Select>
+                {errors.role && (
+                  <Typography variant="caption" color="error">
+                    {errors.role}
+                  </Typography>
+                )}
+              </FormControl>
+            </Grid>
+            {/* Campos de texto */}
+            <Grid item xs={12}>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="name"
+                name="name"
+                label="Nombre completo"
+                type="text"
+                fullWidth
+                variant="outlined"
+                value={formData.name}
+                onChange={handleInputChange}
+                error={!!errors.name}
+                helperText={errors.name}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                margin="dense"
+                id="email"
+                name="email"
+                label="Correo electrónico"
+                type="email"
+                fullWidth
+                variant="outlined"
+                value={formData.email}
+                onChange={handleInputChange}
+                error={!!errors.email}
+                helperText={errors.email}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                margin="dense"
+                id="password"
+                name="password"
+                label="Contraseña"
+                type="password"
+                fullWidth
+                variant="outlined"
+                value={formData.password}
+                onChange={handleInputChange}
+                error={!!errors.password}
+                helperText={errors.password}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                margin="dense"
+                id="confirmPassword"
+                name="confirmPassword"
+                label="Confirmar contraseña"
+                type="password"
+                fullWidth
+                variant="outlined"
+                value={formData.confirmPassword}
+                onChange={handleInputChange}
+                error={!!errors.confirmPassword}
+                helperText={errors.confirmPassword}
+              />
+            </Grid>
           </Grid>
-          {/* Campos de texto */}
-          <Grid item xs={12}>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="username"
-              name="username"
-              label="Nombre completo"
-              type="text"
-              fullWidth
-              variant="outlined"
-              value={formData.username}
-              onChange={handleInputChange}
-              error={!!errors.username}
-              helperText={errors.username}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              margin="dense"
-              id="email"
-              name="email"
-              label="Correo electrónico"
-              type="email"
-              fullWidth
-              variant="outlined"
-              value={formData.email}
-              onChange={handleInputChange}
-              error={!!errors.email}
-              helperText={errors.email}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              margin="dense"
-              id="password"
-              name="password"
-              label="Contraseña"
-              type="password"
-              fullWidth
-              variant="outlined"
-              value={formData.password}
-              onChange={handleInputChange}
-              error={!!errors.password}
-              helperText={errors.password}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              margin="dense"
-              id="confirmPassword"
-              name="confirmPassword"
-              label="Confirmar contraseña"
-              type="password"
-              fullWidth
-              variant="outlined"
-              value={formData.confirmPassword}
-              onChange={handleInputChange}
-              error={!!errors.confirmPassword}
-              helperText={errors.confirmPassword}
-            />
-          </Grid>
-        </Grid>
-      </DialogContent>
-      <DialogActions sx={{ p: 2 }}>
-        <Button onClick={handleClose}>Cancelar</Button>
-        <Button onClick={handleSubmit}>Registrar</Button>
-      </DialogActions>
-    </Dialog>
+        </DialogContent>
+        {!loading ? 
+        <>
+        <DialogActions sx={{ p: 2 }}>
+          <Button onClick={handleClose}>Cancelar</Button>
+          <Button onClick={handleSubmit}>Registrar</Button>
+        </DialogActions>
+        </>  
+        :
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <CircularProgress />
+        </Box>
+      }
+      </Dialog>
+      <ToastContainer
+        position="bottom-center"
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+    </>
   );
 };
 
