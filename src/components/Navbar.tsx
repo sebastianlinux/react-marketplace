@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from 'react-router-dom'; // Importa Link para la navegación
+import RegisterDialog from './RegisterDialog';
 
 interface NavItem {
   label: string;
@@ -20,7 +21,7 @@ interface NavItem {
 
 const Navbar: React.FC = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
-
+  const [viewRegisterDialog, setViewRegisterDialog] = useState<boolean>(true)
   const pages: NavItem[] = [ // Define las páginas de tu Navbar
     { label: 'Inicio', path: '/' },
     { label: 'Productos', path: '/products' },
@@ -32,11 +33,17 @@ const Navbar: React.FC = () => {
     setAnchorElNav(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
+  const handleCloseNavMenu = (label:string) => {
     setAnchorElNav(null);
   };
 
   return (
+    <>
+    
+    <RegisterDialog open={viewRegisterDialog} onClose={() => setViewRegisterDialog(false)}
+     onSubmit={function (userData: any): void {
+        throw new Error('Function not implemented.');
+      } } />
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
@@ -82,13 +89,13 @@ const Navbar: React.FC = () => {
                 horizontal: 'left',
               }}
               open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
+              onClose={() => handleCloseNavMenu('')}
               sx={{
                 display: { xs: 'block', md: 'none' },
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page.label} onClick={handleCloseNavMenu} component={Link} to={page.path}>
+                <MenuItem key={page.label} onClick={() => handleCloseNavMenu(page.label)} component={Link} to={page.path}>
                   <Typography textAlign="center">{page.label}</Typography>
                 </MenuItem>
               ))}
@@ -116,7 +123,7 @@ const Navbar: React.FC = () => {
             {pages.map((page) => (
               <Button
                 key={page.label}
-                onClick={handleCloseNavMenu}
+                onClick={() => handleCloseNavMenu(page.label)}
                 sx={{ my: 2, color: 'white', display: 'block' }}
                 component={Link} to={page.path} // Usando Link para la navegación
               >
@@ -127,6 +134,7 @@ const Navbar: React.FC = () => {
         </Toolbar>
       </Container>
     </AppBar>
+    </>
   );
 };
 
