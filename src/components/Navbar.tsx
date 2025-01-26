@@ -13,35 +13,53 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from 'react-router-dom'; // Importa Link para la navegación
 import RegisterDialog from './RegisterDialog';
+import LoginDialog from './LoginDialog';
 
 interface NavItem {
   label: string;
   path: string;
+  action?: 'register' | 'login'; 
 }
 
 const Navbar: React.FC = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
-  const [viewRegisterDialog, setViewRegisterDialog] = useState<boolean>(true)
+  const [viewRegisterDialog, setViewRegisterDialog] = useState<boolean>(false)
+  const [viewLoginDialog, setViewLoginDialog] = useState<boolean>(false)
   const pages: NavItem[] = [ // Define las páginas de tu Navbar
     { label: 'Inicio', path: '/' },
     { label: 'Productos', path: '/products' },
-    { label: 'Iniciar sesión', path: '' },
-    { label: 'Registrarse', path: '' },
+    { label: 'Iniciar sesión', path: '',action:'login'},
+    { label: 'Registrarse', path: '', action:'register' },
   ];
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
 
-  const handleCloseNavMenu = (label:string) => {
+  const handleCloseNavMenu = () => {
+    
     setAnchorElNav(null);
   };
+
+  const handleOpenDialog = (action: 'register' | 'login') => {
+    handleCloseNavMenu();
+    if (action === 'register') {
+      setViewRegisterDialog(true);
+    } else if (action === 'login') {
+      setViewLoginDialog(true);
+    }
+  };
+
 
   return (
     <>
     
     <RegisterDialog open={viewRegisterDialog} onClose={() => setViewRegisterDialog(false)}
      onSubmit={function (userData: any): void {
+        throw new Error('Function not implemented.');
+      } } />
+      <LoginDialog open={viewLoginDialog} onClose={ () => setViewLoginDialog(false) }
+       onSubmit={function (userData: { email: string; password: string; }): void {
         throw new Error('Function not implemented.');
       } } />
     <AppBar position="static">
@@ -89,15 +107,25 @@ const Navbar: React.FC = () => {
                 horizontal: 'left',
               }}
               open={Boolean(anchorElNav)}
-              onClose={() => handleCloseNavMenu('')}
+              onClose={() => handleCloseNavMenu}
               sx={{
                 display: { xs: 'block', md: 'none' },
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page.label} onClick={() => handleCloseNavMenu(page.label)} component={Link} to={page.path}>
+                <React.Fragment key={page.label}>
+                  {page.path === '' ?
+                  (
+                  <MenuItem key={page.label}   onClick={() => {handleOpenDialog(page.action || 'login');}}>
                   <Typography textAlign="center">{page.label}</Typography>
                 </MenuItem>
+                  ) 
+                  :(
+                    <MenuItem key={page.label} onClick={() => handleCloseNavMenu} component={Link} to={page.path}>
+                    <Typography textAlign="center">{page.label}</Typography>
+                  </MenuItem>
+                  )}
+                </React.Fragment>
               ))}
             </Menu>
           </Box>
@@ -121,14 +149,25 @@ const Navbar: React.FC = () => {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}> {/* Menú de escritorio */}
             {pages.map((page) => (
+            <React.Fragment key={page.label}> {/* Usar Fragment para evitar key prop error */}
+            {page.path === '' ? ( // Condición: si el path está vacío
               <Button
-                key={page.label}
-                onClick={() => handleCloseNavMenu(page.label)}
+                onClick={() => {handleOpenDialog(page.action || 'login');}} // Ejecuta la acción
                 sx={{ my: 2, color: 'white', display: 'block' }}
-                component={Link} to={page.path} // Usando Link para la navegación
               >
                 {page.label}
               </Button>
+            ) : ( // Si el path no está vacío
+              <Button
+                component={Link}
+                to={page.path}
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                {page.label}
+              </Button>
+            )}
+          </React.Fragment>
             ))}
           </Box>
         </Toolbar>

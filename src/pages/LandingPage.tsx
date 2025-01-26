@@ -21,7 +21,7 @@ const LandingPage: React.FC = () => {
 
       <Container sx={{ py: 8 }}>
         <Typography variant="h4" component="h2" align="center" gutterBottom>
-          Secciones Destacadas
+          Productos Destacados
         </Typography>
         <Grid container spacing={4}>
           <Grid item xs={12} sm={6} md={4}>

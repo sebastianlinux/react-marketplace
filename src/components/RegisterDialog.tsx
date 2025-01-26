@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Button,
   TextField,
@@ -13,7 +13,7 @@ import {
   FormControl,
   SelectChangeEvent,
   Typography,
-} from '@mui/material';
+} from "@mui/material";
 
 interface RegisterDialogProps {
   open: boolean;
@@ -27,54 +27,57 @@ interface RegisterDialogProps {
   }) => void;
 }
 
-const RegisterDialog: React.FC<RegisterDialogProps> = ({ open, onClose, onSubmit }) => {
+const RegisterDialog: React.FC<RegisterDialogProps> = ({
+  open,
+  onClose,
+  onSubmit,
+}) => {
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    userType: '',
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    userType: "",
   });
   const [errors, setErrors] = useState({} as any);
 
-
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
-    setErrors({ ...errors, [event.target.name]: '' });
+    setErrors({ ...errors, [event.target.name]: "" });
   };
 
   const handleSelectChange = (event: SelectChangeEvent<string>) => {
     setFormData({ ...formData, userType: event.target.value }); // Acceso directo a event.target.value
-    setErrors({ ...errors, userType: '' });
+    setErrors({ ...errors, userType: "" });
   };
-
- 
 
   const validateForm = () => {
     let newErrors: any = {};
 
     if (!formData.username) {
-      newErrors.username = 'El nombre completo es requerido';
+      newErrors.username = "El nombre completo es requerido";
     }
 
     if (!formData.email) {
-      newErrors.email = 'El correo electrónico es requerido';
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(formData.email)) {
-      newErrors.email = 'Formato de correo electrónico inválido';
+      newErrors.email = "El correo electrónico es requerido";
+    } else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(formData.email)
+    ) {
+      newErrors.email = "Formato de correo electrónico inválido";
     }
 
     if (!formData.password) {
-      newErrors.password = 'La contraseña es requerida';
+      newErrors.password = "La contraseña es requerida";
     } else if (formData.password.length < 6) {
-      newErrors.password = 'La contraseña debe tener al menos 6 caracteres';
+      newErrors.password = "La contraseña debe tener al menos 6 caracteres";
     }
 
     if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Las contraseñas no coinciden';
+      newErrors.confirmPassword = "Las contraseñas no coinciden";
     }
 
     if (!formData.userType) {
-      newErrors.userType = 'Debe seleccionar un tipo de usuario';
+      newErrors.userType = "Debe seleccionar un tipo de usuario";
     }
 
     setErrors(newErrors);
@@ -85,22 +88,57 @@ const RegisterDialog: React.FC<RegisterDialogProps> = ({ open, onClose, onSubmit
     if (validateForm()) {
       onSubmit(formData);
       handleClose();
-      setFormData({ username: '', email: '', password: '', confirmPassword: '', userType: '' });
+      setFormData({
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        userType: "",
+      });
       setErrors({});
     }
   };
 
   const handleClose = () => {
     onClose();
-    setFormData({ username: '', email: '', password: '', confirmPassword: '', userType: '' });
+    setFormData({
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      userType: "",
+    });
     setErrors({});
   };
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Registro</DialogTitle>
+      <DialogTitle>Registro de usuario</DialogTitle>
       <DialogContent>
         <Grid container spacing={2} sx={{ mt: 2 }}>
+          {/* Selector de tipo de usuario */}
+          <Grid item xs={12}>
+            <FormControl fullWidth>
+              <InputLabel id="user-type-label">Tipo de usuario</InputLabel>
+              <Select
+                labelId="user-type-label"
+                id="userType"
+                name="userType"
+                value={formData.userType}
+                label="Tipo de usuario"
+                onChange={handleSelectChange}
+                error={!!errors.userType}
+              >
+                <MenuItem value="comprador">Comprador</MenuItem>
+                <MenuItem value="vendedor">Vendedor</MenuItem>
+              </Select>
+              {errors.userType && (
+                <Typography variant="caption" color="error">
+                  {errors.userType}
+                </Typography>
+              )}
+            </FormControl>
+          </Grid>
           {/* Campos de texto */}
           <Grid item xs={12}>
             <TextField
@@ -162,26 +200,6 @@ const RegisterDialog: React.FC<RegisterDialogProps> = ({ open, onClose, onSubmit
               error={!!errors.confirmPassword}
               helperText={errors.confirmPassword}
             />
-          </Grid>
-
-          {/* Selector de tipo de usuario */}
-          <Grid item xs={12}>
-            <FormControl fullWidth>
-              <InputLabel id="user-type-label">Tipo de usuario</InputLabel>
-              <Select
-                labelId="user-type-label"
-                id="userType"
-                name="userType"
-                value={formData.userType}
-                label="Tipo de usuario"
-                onChange={handleSelectChange}
-                error={!!errors.userType}
-              >
-                <MenuItem value="comprador">Comprador</MenuItem>
-                <MenuItem value="vendedor">Vendedor</MenuItem>
-              </Select>
-                {errors.userType && <Typography variant="caption" color="error">{errors.userType}</Typography>}
-            </FormControl>
           </Grid>
         </Grid>
       </DialogContent>
