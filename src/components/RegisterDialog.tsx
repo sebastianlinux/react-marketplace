@@ -23,19 +23,12 @@ import { ToastContainer } from "react-toastify";
 
 interface RegisterDialogProps {
   open: boolean;
-  onClose: () => void;
-  onSubmit: (userData: {
-    name: string;
-    email: string;
-    password: string;
-    role: string;
-  }) => void;
+  onClose: () => void
 }
 
 const RegisterDialog: React.FC<RegisterDialogProps> = ({
   open,
   onClose,
-  onSubmit,
 }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -97,7 +90,6 @@ const RegisterDialog: React.FC<RegisterDialogProps> = ({
       }
       delete dataToSend.confirmPassword
       const res = await APIService.userRegister({...dataToSend})
-      onSubmit(formData);
       if(res.status){
       handleClose();
       Notify('Registro exitoso','success')

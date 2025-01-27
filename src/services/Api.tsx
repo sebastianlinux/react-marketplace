@@ -8,6 +8,7 @@ interface IAPIService {
   getToken(): Promise<AuthResponse | undefined>;
   getUsers(): Promise<User[] | undefined>;
   userRegister(userData: User): Promise<any | undefined>;
+  userLogin(userData: any): Promise<any | undefined>;
 }
 
 const APIService: IAPIService = {
@@ -74,6 +75,27 @@ const APIService: IAPIService = {
       } else {
         // Manejar otros errores
         message = 'Ocurrió un error inesperado.'
+      }
+      return {status: false , message}
+    }
+  },
+
+  userLogin: async (userData: User): Promise<any | undefined> => { // Recibe userData
+    try {
+      const res = await axios.post<User>(`${endPoint}/auth/login`, userData, { // Envía userData en el body
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      return {status: true , data: res.data}
+    } catch (error: any) {
+      let message = ''
+      if (error?.response?.status === 401) {
+        // Manejar error de conflicto (correo electrónico duplicado)
+        message = 'Credenciales incorrectas.'
+      } else {
+        // Manejar otros errores
+        message = 'No es posible iniciar sesión'
       }
       return {status: false , message}
     }

@@ -9,8 +9,8 @@ import LandingPage from './pages/LandingPage';
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <BrowserRouter> {/* Envuelve la aplicación con BrowserRouter */}
-        <Routes> {/* Define las rutas */}
+      <BrowserRouter>
+        <Routes>
           <Route path="/" element={<LandingPage />} /> {/* Ruta para la página de inicio */}
 {/*           <Route path="/product/:id" element={<ProductDetails />} /> {/* Ruta con parámetro }
           <Route path="*" element={<NotFound />} /> {/* Ruta para cualquier otra ruta (404) } */}

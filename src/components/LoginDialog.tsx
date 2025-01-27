@@ -9,18 +9,24 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
-
+import APIService from 'services/Api';
+import Notify from './Notify';
+import { RootState, AppDispatch } from './../store';
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from './../redux/authSlice';
 interface LoginDialogProps {
   open: boolean;
   onClose: () => void;
-  onSubmit: (userData: { email: string; password: string }) => void;
 }
 
-const LoginDialog: React.FC<LoginDialogProps> = ({ open, onClose, onSubmit }) => {
+const LoginDialog: React.FC<LoginDialogProps> = ({ open, onClose }) => {
+  const dispatch = useDispatch<AppDispatch>();
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
+  const [loading, setLoading] = useState<boolean>(false)
   const [errors, setErrors] = useState({} as any);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,12 +51,21 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ open, onClose, onSubmit }) =>
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
     if (validateForm()) {
-      onSubmit(formData);
-      handleClose();
-      setFormData({ email: '', password: '' });
-      setErrors({});
+      setLoading(true)
+      const res = await APIService.userLogin({...formData})
+      if(res.status){
+        handleClose();
+        setFormData({ email: '', password: '' });
+        setErrors({});
+        Notify('Login éxitoso','success')
+        localStorage.setItem("token", res?.data?.token)
+        dispatch(loginSuccess(res?.data?.user))
+      }else{
+        Notify(res?.message,'error')
+      }
+      setLoading(false)
     }
   };
 
