@@ -1,12 +1,26 @@
+
 export interface User {
-    id?: number;
-    username?: string;
-    email?: string;
-    // ... otras propiedades del usuario
-  }
-  
+  id: number;
+  email: string;
+  name: string;
+  role: string;
+  token: string | null;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+}
   export interface AuthResponse {
     accessToken: string;
-    // ... otras propiedades de la respuesta de autenticación
   }
-  
+
+export interface Product {
+  id: string;
+  sku: string;
+  name: string;
+  description: string;
+  photoUrl: string;
+  price: string;
+  status?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}

@@ -8,12 +8,15 @@ import {
   DialogTitle,
   Grid,
   Typography,
+  Box,
+  CircularProgress,
 } from '@mui/material';
 import APIService from 'services/Api';
 import Notify from './Notify';
-import { RootState, AppDispatch } from './../store';
+import {  AppDispatch } from './../store';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from './../redux/authSlice';
+import { User } from 'types';
 interface LoginDialogProps {
   open: boolean;
   onClose: () => void;
@@ -60,8 +63,8 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ open, onClose }) => {
         setFormData({ email: '', password: '' });
         setErrors({});
         Notify('Login éxitoso','success')
-        localStorage.setItem("token", res?.data?.token)
-        dispatch(loginSuccess(res?.data?.user))
+        const user = {...res?.data?.user} as User
+        dispatch(loginSuccess({user:user}))
       }else{
         Notify(res?.message,'error')
       }
@@ -120,10 +123,16 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ open, onClose }) => {
             )}
         </Grid>
       </DialogContent>
-      <DialogActions sx={{ p: 2 }}>
-        <Button onClick={handleClose}>Cancelar</Button>
-        <Button onClick={handleSubmit}>Iniciar Sesión</Button>
-      </DialogActions>
+      {!loading ? 
+        <DialogActions sx={{ p: 2 }}>
+          <Button onClick={handleClose}>Cancelar</Button>
+          <Button onClick={handleSubmit}>Iniciar Sesión</Button>
+        </DialogActions>
+      :
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <CircularProgress />
+    </Box>
+      }
     </Dialog>
   );
 };
