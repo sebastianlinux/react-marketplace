@@ -17,6 +17,7 @@ interface CartItem {
   name: string;
   price: number;
   quantity: number;
+  photoUrl: string
 }
 
 interface Props {
@@ -61,7 +62,7 @@ const Cart: React.FC<Props> = ({ open, onClose }) => {
             {cartItems.map((item: CartItem) => (
               <Box key={item.id} sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                 <Box sx={{ width: 80, mr: 2 }}>
-                  <img src={item.name} alt={item.name} width="100%" />
+                  <img src={`${process.env.REACT_APP_API}/${item.photoUrl}`} alt={item.name} width="100%" />
                 </Box>
                 <Box sx={{ flexGrow: 1 }}>
                   <Typography variant="subtitle1">{item.name}</Typography>

@@ -14,15 +14,23 @@ import { Product } from "types";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import ProductDetail from "./ProductDetail";
 import Decimal from "decimal.js";
+import { useDispatch } from "react-redux";
+import { addItem } from "./../../redux/cartSlice";
 interface ProductListProps {
   products: Product[];
   loading: boolean;
 }
 
 const ProductList: React.FC<ProductListProps> = ({ products, loading }) => {
+  const dispatch = useDispatch(); 
   const [currentProduct, setCurrentProduct] = useState<Product>();
   const [error, setError] = useState<string | null>(null);
   const [viewDetail, setViewDetail] = useState<boolean>(false);
+
+  const handleAddToCart = (product:Product) => {
+    dispatch(addItem(product)); // Dispara la acción addItem con el producto
+  };
+
   const handleDetail = (product: Product) => {
     setCurrentProduct(product);
     setViewDetail(true);
@@ -113,6 +121,7 @@ const ProductList: React.FC<ProductListProps> = ({ products, loading }) => {
                     <Button
                       variant="contained"
                       startIcon={<AddShoppingCartIcon />}
+                      onClick={() => handleAddToCart(product)}
                     >
                       Añadir al carrito
                     </Button>
