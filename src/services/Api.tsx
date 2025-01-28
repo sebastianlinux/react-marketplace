@@ -127,7 +127,7 @@ const APIService: IAPIService = {
   },
   productListByUser: async (userId: string): Promise< any | undefined> => {
     try {
-      const res = await axios.get<Product[]>(`${endPoint}/products/${userId}`, { // Usa GET y una ruta con el userId
+      const res = await axios.get<Product[]>(`${endPoint}/products?userId=x${userId}`, { // Usa GET y una ruta con el userId
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`, // Incluye el token si es necesario

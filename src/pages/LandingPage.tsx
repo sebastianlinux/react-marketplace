@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Container, Grid, Typography, Box } from "@mui/material";
 import Hero from "../components/Hero";
-import Navbar from "../components/Navbar";
 import APIService from "services/Api";
 import { Product } from "types";
 import ProductList from "components/Product/ProductList";
+import MainLayout from "Layouts/MainLayout";
 
 const LandingPage: React.FC = () => {
   const loremIpsum =
@@ -47,21 +47,24 @@ const LandingPage: React.FC = () => {
     
   return (
     <div>
-      <Navbar />
-      <Hero
-        title="Bienvenido a Nuestro Marketplace"
-        description={loremIpsum}
-        buttonText="Explorar Productos"
-        imageUrl={""} // Reemplaza con tu imagen
-      />
+      <MainLayout>
 
-      <Container sx={{ py: 8 }}>
-        <Typography variant="h4" component="h2" align="center" gutterBottom>
-          Productos Destacados
-        </Typography>
-        <ProductList loading={loadingProducts} products={products} />
-       
-      </Container>
+        <Hero
+          title="Bienvenido a Nuestro Marketplace"
+          description={loremIpsum}
+          buttonText="Explorar Productos"
+          imageUrl={""} // Reemplaza con tu imagen
+        />
+
+        <Container sx={{ py: 8 }}>
+          <Typography variant="h4" component="h2" align="center" gutterBottom>
+            Productos Destacados
+          </Typography>
+          <ProductList loading={loadingProducts} products={products} />
+        
+        </Container>
+
+      </MainLayout>
     </div>
   );
 };

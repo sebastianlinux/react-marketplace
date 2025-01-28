@@ -11,6 +11,7 @@ import {
   Button,
 } from "@mui/material"; // Importaciones de Material UI
 import { Product } from "types";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import ProductDetail from "./ProductDetail";
 import Decimal from "decimal.js";
 interface ProductListProps {
@@ -102,6 +103,20 @@ const ProductList: React.FC<ProductListProps> = ({ products, loading }) => {
                   >
                     Ver Detalle
                   </Button>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      marginTop: ".4rem"
+                    }}
+                  >
+                    <Button
+                      variant="contained"
+                      startIcon={<AddShoppingCartIcon />}
+                    >
+                      Añadir al carrito
+                    </Button>
+                  </Box>
                 </CardContent>
               </Card>
             </Grid>

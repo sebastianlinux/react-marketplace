@@ -9,7 +9,9 @@ import {
   MenuItem,
   Container,
   Button,
+  Badge,
 } from "@mui/material";
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'; // Importa el icono del carrito
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Link } from "react-router-dom"; // Importa Link para la navegación
@@ -18,6 +20,8 @@ import LoginDialog from "./LoginDialog";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "store";
 import { logout } from './../redux/authSlice';
+import { selectCartItems } from "./../redux/cartSlice";
+import Cart from "./Cart";
 interface NavItem {
   label: string;
   path: string;
@@ -29,6 +33,7 @@ const Navbar: React.FC = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [viewRegisterDialog, setViewRegisterDialog] = useState<boolean>(false);
   const [viewLoginDialog, setViewLoginDialog] = useState<boolean>(false);
+  const [isCartOpen, setIsCartOpen] = useState<boolean>(false)
   const dispatch = useDispatch<AppDispatch>();
 
   const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
@@ -36,6 +41,10 @@ const Navbar: React.FC = () => {
   const logoutUser = () => {
     dispatch(logout())
   }
+
+  const handleCartOpen = () => {
+    setIsCartOpen(true);
+  };
   
   const pages: NavItem[] = [
     // Define las páginas de tu Navbar
@@ -72,9 +81,13 @@ const Navbar: React.FC = () => {
       setViewLoginDialog(true);
     }
   };
+  const cartItems = useSelector((state: RootState) => selectCartItems(state));
+
 
   return (
     <>
+          <Cart open={isCartOpen} onClose={() => setIsCartOpen(false)} /> {/* Pasa isCartOpen como prop al componente Cart */}
+
       <RegisterDialog
         open={viewRegisterDialog}
         onClose={() => setViewRegisterDialog(false)}
@@ -163,6 +176,7 @@ const Navbar: React.FC = () => {
                       )}
                     </React.Fragment>
                   ))}
+            
               </Menu>
             </Box>
             <Typography
@@ -228,6 +242,11 @@ const Navbar: React.FC = () => {
                 </Button>
                 </>
               )}
+                <IconButton color="inherit" onClick={() => handleCartOpen()} >  
+                <Badge badgeContent={cartItems.length} color="error"> {/* Badge con la cantidad */}
+                  <ShoppingCartIcon />
+                </Badge>
+              </IconButton>
             </Box>
           </Toolbar>
         </Container>
