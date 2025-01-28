@@ -31,9 +31,7 @@ const Navbar: React.FC = () => {
   const [viewLoginDialog, setViewLoginDialog] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
 
-  const { isAuthenticated, user } = useSelector(
-    (state: RootState) => state.auth
-  ); // Tipado con RootState
+  const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
 
 
   const logoutUser = () => {

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { AuthResponse, User } from "types";
+import { AuthResponse, Product, User } from "types";
 
 export const endPoint = process.env.REACT_APP_API || "http://localhost:3000/api"; // Añade /api al endpoint
 
@@ -9,6 +9,8 @@ interface IAPIService {
   getUsers(): Promise<User[] | undefined>;
   userRegister(userData: User): Promise<any | undefined>;
   userLogin(userData: any): Promise<any | undefined>;
+  productCreate(product: Product): Promise<any | undefined>;
+  productListByUser(userId: string): Promise<any | undefined>;
 }
 
 const APIService: IAPIService = {
@@ -16,7 +18,8 @@ const APIService: IAPIService = {
     try {
       const res = await axios.get<AuthResponse>(`${endPoint}/v1/isf/generate-access-token`, {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
       localStorage.setItem("accessToken", res.data.accessToken);
@@ -54,9 +57,9 @@ const APIService: IAPIService = {
     }
   },
 
-  userRegister: async (userData: User): Promise<any | undefined> => { // Recibe userData
+  userRegister: async (userData: User): Promise<any | undefined> => { 
     try {
-      const res = await axios.post<User>(`${endPoint}/users`, userData, { // Envía userData en el body
+      const res = await axios.post<User>(`${endPoint}/users`, userData, { 
         headers: {
           "Content-Type": "application/json",
         },
@@ -80,11 +83,53 @@ const APIService: IAPIService = {
     }
   },
 
-  userLogin: async (userData: User): Promise<any | undefined> => { // Recibe userData
+  userLogin: async (userData: User): Promise<any | undefined> => { 
     try {
-      const res = await axios.post<User>(`${endPoint}/auth/login`, userData, { // Envía userData en el body
+      const res = await axios.post<User>(`${endPoint}/auth/login`, userData, {
         headers: {
           "Content-Type": "application/json",
+        },
+      });
+      return {status: true , data: res.data}
+    } catch (error: any) {
+      let message = ''
+      if (error?.response?.status === 401) {
+        // Manejar error de conflicto (correo electrónico duplicado)
+        message = 'Credenciales incorrectas.'
+      } else {
+        // Manejar otros errores
+        message = 'No es posible iniciar sesión'
+      }
+      return {status: false , message}
+    }
+  },
+
+  productCreate: async (product: Product): Promise<any | undefined> => { 
+    try {
+      const res = await axios.post<Product>(`${endPoint}/products`, product, { 
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return {status: true , data: res.data}
+    } catch (error: any) {
+      let message = ''
+      if (error?.response?.status === 401) {
+        // Manejar error de conflicto (correo electrónico duplicado)
+        message = 'Credenciales incorrectas.'
+      } else {
+        // Manejar otros errores
+        message = 'No es posible iniciar sesión'
+      }
+      return {status: false , message}
+    }
+  },
+  productListByUser: async (userId: string): Promise< any | undefined> => {
+    try {
+      const res = await axios.get<Product[]>(`${endPoint}/products/${userId}`, { // Usa GET y una ruta con el userId
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`, // Incluye el token si es necesario
         },
       });
       return {status: true , data: res.data}

@@ -1,6 +1,6 @@
 
 export interface User {
-  id: number;
+  id: string;
   email: string;
   name: string;
   role: string;
@@ -13,14 +13,16 @@ export interface User {
     accessToken: string;
   }
 
+ 
 export interface Product {
   id: string;
   sku: string;
   name: string;
   description: string;
   photoUrl: string;
-  price: string;
-  status?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  price: string; 
+  status: string;
+  userId: string;
+  createdAt: string;
+  updatedAt: string;
 }
