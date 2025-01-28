@@ -1,15 +1,18 @@
 import React from 'react';
 import { Box, Typography, Container, Button } from '@mui/material';
 import { Link } from "react-router-dom"; // Importa Link para la navegación
+import { useSelector } from 'react-redux';
+import { RootState } from 'store';
 interface HeroProps {
   title: string;
   description: string;
-  buttonText?: string;
   onButtonClick?: () => void;
   imageUrl?: string;
 }
 
-const Hero: React.FC<HeroProps> = ({ title, description, buttonText, onButtonClick, imageUrl }) => {
+const Hero: React.FC<HeroProps> = ({ title, description, onButtonClick, imageUrl }) => {
+
+  const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
   return (
     <Box
       sx={{
@@ -34,13 +37,13 @@ const Hero: React.FC<HeroProps> = ({ title, description, buttonText, onButtonCli
         <Typography variant="h5" align="center" paragraph sx={{ textShadow: imageUrl ? '2px 2px 4px #000000' : 'none' }}>
           {description}
         </Typography>
-        {buttonText && (
+      {/*   {buttonText &&  (
           <Box sx={{ mt: 4 }}>
             <Button component={Link} to={'/products'} variant="contained" color="primary" onClick={onButtonClick}>
               {buttonText}
             </Button>
           </Box>
-        )}
+        )} */}
       </Container>
     </Box>
   );

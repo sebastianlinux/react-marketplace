@@ -6,11 +6,16 @@ import {
   Typography,
   Box,
   Chip,
+  Divider,
+  Avatar,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { Product } from "types";
-import Decimal from "decimal.js"; 
-
+import Decimal from "decimal.js";
+import moment from "moment";
+import "moment/locale/es";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { Link } from "react-router-dom";
 type ParamsProductDetail = {
   product: Product;
   open: boolean;
@@ -25,7 +30,7 @@ const ProductDetail: React.FC<ParamsProductDetail> = ({
   if (!product) {
     return null;
   }
-  const formattedPrice = new Decimal(product.price).toFixed(2); 
+  const formattedPrice = new Decimal(product.price).toFixed(2);
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
@@ -34,6 +39,7 @@ const ProductDetail: React.FC<ParamsProductDetail> = ({
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
+          fontWeight:'700'
         }}
       >
         {product.name}
@@ -50,21 +56,33 @@ const ProductDetail: React.FC<ParamsProductDetail> = ({
           />
 
           <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <Typography variant="h6">Precio:</Typography>
-            <Typography variant="h6">${formattedPrice}</Typography>
+            <Typography variant="h6">Precio: ${formattedPrice}</Typography>
+          </Box>
+
+          <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <Typography variant="h6">{product.description}</Typography>
+          </Box>
+          <Divider />
+          <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <Typography variant="body1">Vendedor</Typography>
+            <Avatar
+              sx={{
+                width: 20,
+                height: 20,
+                backgroundColor: "primary.main",
+                margin: "5px",
+              }}
+            >
+              <AccountCircleIcon sx={{ fontSize: 30, color: "white" }} />
+            </Avatar>
+            <Typography variant="body1" component={Link} onClick={handleClose} to={`/admin/users/products/${product?.user?.id}`}>{product?.user?.name}</Typography>
           </Box>
           <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <Typography variant="h6">SKU:</Typography>
+            <Typography variant="body1">código:</Typography>
             <Typography variant="body1">{product.sku}</Typography>
           </Box>
-
           <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <Typography variant="h6">Descripción:</Typography>
-            <Typography variant="body1">{product.description}</Typography>
-          </Box>
-
-          <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <Typography variant="h6">Estado:</Typography>
+            <Typography variant="body1">Estado:</Typography>
             <Chip
               label={product.status}
               color={product.status === "active" ? "success" : "error"}
@@ -73,12 +91,17 @@ const ProductDetail: React.FC<ParamsProductDetail> = ({
           </Box>
           {/* Otros detalles del producto */}
           <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <Typography variant="h6">Creado:</Typography>
-            <Typography variant="body1">{product.createdAt}</Typography>
+            <Typography variant="body1">Creado:</Typography>
+            <Typography variant="body1">
+              {moment(product.createdAt).format("LL")}
+            </Typography>
           </Box>
           <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <Typography variant="h6">Actualizado:</Typography>
-            <Typography variant="body1">{product.updatedAt}</Typography>
+            <Typography variant="body1">Actualizado:</Typography>
+
+            <Typography variant="body1">
+              {moment(product.updatedAt).format("LL")}
+            </Typography>
           </Box>
         </Box>
       </DialogContent>

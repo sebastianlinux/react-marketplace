@@ -1,5 +1,6 @@
 import { Box, Button } from "@mui/material";
-import Navbar from "components/Navbar";
+import MainLayout from "Layouts/MainLayout";
+import Paginacion from "components/Pagination";
 import AddProduct from "components/Product/AddProduct";
 import ProductList from "components/Product/ProductList";
 import { useEffect, useState } from "react";
@@ -14,6 +15,8 @@ const ProductsPage = () => {
   const [showAddProduct, setShowAddProduct] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
   const [products, setProducts] = useState<Product[]>([])
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const [totalPages,setTotalPages] = useState<number>(1)
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
     const fetchProducts = async () => {
@@ -21,9 +24,11 @@ const ProductsPage = () => {
       setError(null);
 
       try {
-        const result = await APIService.productListByUser(user?.id || '');
+        const result = await APIService.productListByUser(user?.id || '',currentPage-1);
+        console.log('respuesta es ',result)
         if (result?.status && result.data) {
-          setProducts(result.data);
+          setProducts(result.data?.products || []);
+          setTotalPages(result.data?.totalCount || 1);
         } else {
           setError(result?.message || 'Error desconocido al obtener productos.');
         }
@@ -36,29 +41,45 @@ const ProductsPage = () => {
     };
 
     fetchProducts();
-  }, [user]); 
+  }, [user,currentPage]); 
   
-  return (
-    <div>
-      <div>
-      <Navbar />
-      <AddProduct open={showAddProduct} onClose={() => setShowAddProduct(false)} />
-      <Box sx={{ width: '90%', margin: '0 auto', paddingTop:'4rem' }}>
-      <div>
-        <Box sx={{ display:'flex', justifyContent:'space-between', width:'100%', alignItems:'center'}}>
-          <h2>
-            Mis productos
-          </h2>
-          <Button onClick={() => setShowAddProduct(true)} variant="contained">Añadir producto</Button>
+  const handlePage = (x:any,e:any) => {
+    setCurrentPage(e)
+  }
 
+  const handleCloseAddProduct = (product?:Product) => {
+    if(product){
+      setProducts([product,...products])
+    }
+    setShowAddProduct(false)
+  }
+  return (
+    <MainLayout>
+
+        <div>
+        <AddProduct open={showAddProduct} onClose={handleCloseAddProduct} />
+        <Box sx={{ width: '90%', margin: '0 auto', paddingTop:'4rem' }}>
+        <div>
+          <Box sx={{ display:'flex', justifyContent:'space-between', width:'100%', alignItems:'center'}}>
+            <h2>
+              Mis productos -  {user?.name}
+            </h2>
+            <Button onClick={() => setShowAddProduct(true)} variant="contained">Añadir producto</Button>
+
+          </Box>
+        </div>
         </Box>
-      </div>
-      </Box>
-      {user?.id && 
+        {user?.id && 
+        <>
         <ProductList products={products} loading={loading}  />
-      }
-      </div>
-    </div>
+        <Paginacion page={currentPage} totalPages={totalPages} onChangePage={handlePage} />
+        </>
+        }
+        </div>
+
+
+      
+    </MainLayout>
   );
 };
 

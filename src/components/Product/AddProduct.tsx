@@ -6,7 +6,6 @@ import {
   Button,
   Box,
   Typography,
-  Paper,
   CircularProgress,
   Alert,
   AlertTitle,
@@ -19,10 +18,12 @@ import { Product } from "types";
 import { useSelector } from "react-redux";
 import { RootState } from "store";
 import APIService from "services/Api";
+import Notify from "components/Notify";
+import { Form } from "react-router-dom";
 
 interface AddProductDialogProps {
   open: boolean;
-  onClose: () => void;
+  onClose: (product?:Product) => void;
 }
 
 const AddProduct: React.FC<AddProductDialogProps> = ({open,onClose}) => {
@@ -60,37 +61,51 @@ const AddProduct: React.FC<AddProductDialogProps> = ({open,onClose}) => {
     setLoading(true);
     setError(null);
     setSuccess(false);
+  
     try {
-      const formData = new FormData()
+      let formData = new FormData();
       formData.append("sku", product.sku);
       formData.append("name", product.name);
       formData.append("description", product.description);
       formData.append("price", product.price.toString());
-
+      const productSave = formData as unknown as Product;
+  
       if (file) {
         formData.append("photoUrl", file);
       }
-      formData.append("userId", user?.id || '')
-      const productSave = formData as unknown as Product
-      const response = await APIService.productCreate(productSave)
-      console.log('ANTES DE ENVIAR PRICE ',product.price)
-      console.log('RESPUESTA DEL PRODUCTO ',response)
+      formData.append("userId", user?.id || '');
 
-      setSuccess(true);
-    } catch (err: any) {
-      console.error("Error al añadir producto:", err);
-      if (axios.isAxiosError(err)) {
-        setError(err.response?.data?.message || "Error al añadir el producto.");
-      } else {
-        setError("Un error desconocido ha ocurrido.");
+      const res = await APIService.productCreate(productSave);
+      if(res?.status){
+        console.log('respuesta guardada',res)
+        onClose(res?.data);
+        Notify('Producto guardado', 'success');
+        formData = new FormData()
+        setProduct({
+          sku: "",
+          name: "",
+          description: "",
+          photoUrl: "",
+          price: "",
+          status: "active",
+          userId: user?.id || ""
+        })
+        setSuccess(true);
+      }else{
+        Notify(res?.message,'error')
       }
+  
+    } catch (err: any) {
+      Notify(err.message, 'error'); // Usa err.message (que ahora contiene el mensaje del backend)
+      console.error("Error al añadir producto:", err);
+      setError(err.message || "Un error desconocido ha ocurrido."); // Usa err.message
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={() => onClose()}>
        <DialogTitle >
         Añadir producto 
          
@@ -179,7 +194,7 @@ const AddProduct: React.FC<AddProductDialogProps> = ({open,onClose}) => {
             <Button type="submit" variant="contained" disabled={loading}>
               {loading ? <CircularProgress size={24} /> : "Añadir producto"}
             </Button>
-            <Button onClick={onClose} sx={{marginTop:".5rem"}} type="button" variant="text" disabled={loading}>
+            <Button onClick={() => onClose()} sx={{marginTop:".5rem"}} type="button" variant="text" disabled={loading}>
               CANCELAR
             </Button>
           </Box>

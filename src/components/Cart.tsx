@@ -11,6 +11,7 @@ import {
   Button,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { Link } from 'react-router-dom';
 
 interface CartItem {
   id: string;
@@ -87,7 +88,7 @@ const Cart: React.FC<Props> = ({ open, onClose }) => {
 
         <Box sx={{ mt: 2 }}>
           <Typography variant="h6">Total: ${calculateTotal().toFixed(2)}</Typography>
-          <Button variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
+          <Button component={Link} to={'/order-resume'} variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
             Comprar
           </Button>
         </Box>

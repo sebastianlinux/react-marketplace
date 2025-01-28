@@ -1,5 +1,5 @@
 import axios from "axios";
-import { AuthResponse, Product, User } from "types";
+import { AuthResponse, Product, ProductResponse, User } from "types";
 
 export const endPoint = process.env.REACT_APP_API || "http://localhost:3000/api"; // Añade /api al endpoint
 
@@ -10,8 +10,8 @@ interface IAPIService {
   userRegister(userData: User): Promise<any | undefined>;
   userLogin(userData: any): Promise<any | undefined>;
   productCreate(product: Product): Promise<any | undefined>;
-  productListByUser(userId: string): Promise<any | undefined>;
-  productListAll(body: any): Promise<any | undefined>;
+  productListByUser(userId: string,page:number,search?:string): Promise<any | undefined>;
+  productListAll(page:number,search?: string): Promise<any | undefined>;
 }
 
 const APIService: IAPIService = {
@@ -115,25 +115,30 @@ const APIService: IAPIService = {
       return {status: true , data: res.data}
     } catch (error: any) {
       let message = ''
-      if (error?.response?.status === 401) {
+      if (error?.response?.status !== 200) {
         // Manejar error de conflicto (correo electrónico duplicado)
-        message = 'Credenciales incorrectas.'
+        message = error?.response?.data?.message
       } else {
         // Manejar otros errores
-        message = 'No es posible iniciar sesión'
+        message = 'No es posible crear el producto'
       }
       return {status: false , message}
     }
   },
-  productListByUser: async (userId: string): Promise< any | undefined> => {
+  productListByUser: async (userId: string,page:number, search?:string): Promise< any | undefined> => {
     try {
-      const res = await axios.get<Product[]>(`${endPoint}/products?userId=x${userId}`, { // Usa GET y una ruta con el userId
+      let url = `${endPoint}/products?userId=${userId}&page=${page}`; 
+      if (search) {
+        url += `&productName=${encodeURIComponent(search)}`; 
+      }
+
+      const res = await axios.get<ProductResponse>(url, { 
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`, // Incluye el token si es necesario
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`, 
         },
       });
-      return {status: true , data: res.data}
+      return {status: true , data: res?.data}
     } catch (error: any) {
       let message = ''
       if (error?.response?.status === 401) {
@@ -146,23 +151,26 @@ const APIService: IAPIService = {
       return {status: false , message}
     }
   },
-  productListAll: async (body: any): Promise< any | undefined> => {
+  productListAll: async (page:number,search: string,): Promise< any | undefined> => {
     try {
-      const res = await axios.get<Product[]>(`${endPoint}/products`, { // Usa GET y una ruta con el userId
+      let url = `${endPoint}/products/all?page=${page}`; 
+      if (search?.length > 0) {
+        url += `&productName=${encodeURIComponent(search)}`; 
+      }
+      
+      const res = await axios.get<ProductResponse[]>(url, { 
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`, // Incluye el token si es necesario
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`, 
         },
       });
       return {status: true , data: res.data}
     } catch (error: any) {
       let message = ''
       if (error?.response?.status === 401) {
-        // Manejar error de conflicto (correo electrónico duplicado)
-        message = 'Credenciales incorrectas.'
+        message = 'no es posible listar.'
       } else {
-        // Manejar otros errores
-        message = 'No es posible iniciar sesión'
+        message = 'No es posible obtener datos'
       }
       return {status: false , message}
     }

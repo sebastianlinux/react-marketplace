@@ -1,6 +1,7 @@
 import React from 'react';
 import { AppBar, Box } from '@mui/material';
 import Navbar from 'components/Navbar';
+import Footer from 'components/Footer';
 
 
 interface Props {
@@ -18,6 +19,7 @@ const Layout: React.FC<Props> = ({ children }) => {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         {children} {/* Renderiza el contenido de la página */}
       </Box>
+      <Footer />
     </Box>
   );
 };

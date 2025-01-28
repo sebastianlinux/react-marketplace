@@ -16,18 +16,23 @@ import ProductDetail from "./ProductDetail";
 import Decimal from "decimal.js";
 import { useDispatch } from "react-redux";
 import { addItem } from "./../../redux/cartSlice";
+import Notify from "components/Notify";
+import { ToastContainer } from "react-toastify";
+import StarDisplay from "components/StarDisplay";
+import { Link } from "react-router-dom";
 interface ProductListProps {
   products: Product[];
   loading: boolean;
 }
 
 const ProductList: React.FC<ProductListProps> = ({ products, loading }) => {
-  const dispatch = useDispatch(); 
+  const dispatch = useDispatch();
   const [currentProduct, setCurrentProduct] = useState<Product>();
   const [error, setError] = useState<string | null>(null);
   const [viewDetail, setViewDetail] = useState<boolean>(false);
 
-  const handleAddToCart = (product:Product) => {
+  const handleAddToCart = (product: Product) => {
+    Notify("Añadido al carrito");
     dispatch(addItem(product)); // Dispara la acción addItem con el producto
   };
 
@@ -77,9 +82,18 @@ const ProductList: React.FC<ProductListProps> = ({ products, loading }) => {
         />
       )}
       <Grid container spacing={2}>
-        <Box sx={{ width: "90%", margin: "0 auto", paddingTop: "4rem" }}>
+        <Box
+          sx={{
+            width: "90%",
+            margin: "0 auto",
+            paddingTop: "4rem",
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 0,
+          }}
+        >
           {products.map((product) => (
-            <Grid item xs={12} sm={6} md={3} key={product.id}>
+            <Grid sx={{p:1}} item xs={12} sm={6} md={3} key={product.id}>
               <Card>
                 <CardMedia
                   component="img"
@@ -91,19 +105,31 @@ const ProductList: React.FC<ProductListProps> = ({ products, loading }) => {
                   <Typography gutterBottom variant="h5" component="div">
                     {product.name}
                   </Typography>
+                  <StarDisplay />
                   <Typography variant="body2" color="text.secondary">
-                    {product.description}
+                    {product?.description?.toLowerCase()}
                   </Typography>
                   <Typography variant="body1" color="text.primary">
-                    Precio: ${new Decimal(product.price).toFixed(2)}
+                     ${new Decimal(product.price).toFixed(2)}
                   </Typography>
                   {product?.user && (
-                    <div>
+                    <Box>
                       Vendedor
-                      <Box sx={{ fontWeight: "bold" }}>
-                        {product?.user?.name}
+                      <Box sx={{ fontWeight: "medium",paddingY:'.3rem',
+                       fontSize:'.9rem',backgroundColor:'#e8e8e8',
+                       width:'fit-content',
+                       borderRadius:'.5rem',
+                       display:'flex',
+                       padding:'.4rem',
+                       marginY:'.4rem',
+                       textDecoration:'none',
+                       color:'#333'
+                       }}
+                       component={Link} to={`/admin/users/products/${product.user.id}`}
+                       >
+                        {product?.user?.name?.toLowerCase()}
                       </Box>
-                    </div>
+                    </Box>
                   )}
                   <Button
                     variant="contained"
@@ -115,7 +141,7 @@ const ProductList: React.FC<ProductListProps> = ({ products, loading }) => {
                     sx={{
                       display: "flex",
                       alignItems: "center",
-                      marginTop: ".4rem"
+                      marginTop: ".4rem",
                     }}
                   >
                     <Button

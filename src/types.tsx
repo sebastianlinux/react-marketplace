@@ -13,7 +13,10 @@ export interface User {
     accessToken: string;
   }
 
- 
+  export interface ProductResponse {
+    products: Product[];
+    totalCount: number; // Si también estás devolviendo un recuento total
+  }
 export interface Product {
   id: string;
   sku: string;
