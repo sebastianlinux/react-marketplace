@@ -25,4 +25,5 @@ export interface Product {
   userId: string;
   createdAt: string;
   updatedAt: string;
+  user?: User
 }

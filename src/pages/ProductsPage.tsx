@@ -36,7 +36,7 @@ const ProductsPage = () => {
     };
 
     fetchProducts();
-  }, [user]); // El useEffect se ejecuta cuando cambia el userId
+  }, [user]); 
   
   return (
     <div>

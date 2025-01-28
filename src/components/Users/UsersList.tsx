@@ -10,6 +10,7 @@ import {
 import React from "react";
 import { User } from "types";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { Link } from "react-router-dom";
 type ParamsUserList = {
   users: User[];
 };
@@ -77,6 +78,14 @@ const UsersList: React.FC<ParamsUserList> = ({ users }) => {
                   Miembro desde
                   <div>{user.createdAt}</div>
                 </Typography>
+                <Button
+                    variant="contained"
+                  component={Link}
+                  sx={{marginTop:".9rem"}}
+                  to={`/admin/users/products/${user.id}`}
+                  >
+                    Ver Productos
+                  </Button>
               </CardContent>
             </Card>
           </Grid>

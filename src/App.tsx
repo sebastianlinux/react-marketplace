@@ -17,7 +17,7 @@ function App() {
         <Route path="/profile" element={<ProfilePage />} /> 
         <Route path="/products" element={<ProductsPage />} /> 
         <Route path="/admin/users" element={<AdminUsersPage />} /> 
-        <Route path="/admin/users/products" element={<AdminUserProductPage />} /> 
+        <Route path="/admin/users/products/:userId" element={<AdminUserProductPage />} /> 
 {/*           <Route path="/product/:id" element={<ProductDetails />} /> {/* Ruta con parámetro }
           <Route path="*" element={<NotFound />} /> {/* Ruta para cualquier otra ruta (404) } */}
         </Routes>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Typography, Container, Button } from '@mui/material';
-
+import { Link } from "react-router-dom"; // Importa Link para la navegación
 interface HeroProps {
   title: string;
   description: string;
@@ -36,7 +36,7 @@ const Hero: React.FC<HeroProps> = ({ title, description, buttonText, onButtonCli
         </Typography>
         {buttonText && (
           <Box sx={{ mt: 4 }}>
-            <Button variant="contained" color="primary" onClick={onButtonClick}>
+            <Button component={Link} to={'/products'} variant="contained" color="primary" onClick={onButtonClick}>
               {buttonText}
             </Button>
           </Box>
