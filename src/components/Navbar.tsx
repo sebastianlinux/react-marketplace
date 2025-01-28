@@ -33,14 +33,15 @@ const Navbar: React.FC = () => {
 
   const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
 
-
   const logoutUser = () => {
     dispatch(logout())
   }
+  
   const pages: NavItem[] = [
     // Define las páginas de tu Navbar
     { label: "Inicio", path: "/", show: true },
     { label: "Productos", path: "/products", show: true },
+    { label: "Usuarios", path: "/admin/users", show: (isAuthenticated && (user?.role === 'admin')) },
     {
       label: "Iniciar sesión",
       path: "",
@@ -215,7 +216,10 @@ const Navbar: React.FC = () => {
                 ))}
               {isAuthenticated && (
                 <>
-                <Button sx={{ my: 2, color: "white", display: "flex" }}>
+                <Button 
+                                 component={Link}
+                                 to={'/profile'}
+                sx={{ my: 2, color: "white", display: "flex" }}>
                   <AccountCircleIcon />
                   {user?.name}
                 </Button>

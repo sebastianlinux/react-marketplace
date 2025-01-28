@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Grid, Typography, Box } from "@mui/material";
 import Hero from "../components/Hero";
 import Navbar from "../components/Navbar";
+import APIService from "services/Api";
+import { Product } from "types";
+import ProductList from "components/Product/ProductList";
 
 const LandingPage: React.FC = () => {
   const loremIpsum =
@@ -9,6 +12,39 @@ const LandingPage: React.FC = () => {
   const loremIpsumShort =
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
 
+    const [products, setProducts] = useState<Product[]>([])
+    const [error, setError] = useState<string | null>(null);
+    const [loadingProducts, setLoadingProducts] = useState(true);
+  
+ /*    const fetchProducts = async() => {
+      const res = await APIService.productListAll({})
+      console.log(res)
+    } */
+
+    const fetchProducts = async () => {
+      setLoadingProducts(true);
+      setError(null);
+
+      try {
+        const result = await APIService.productListAll({});
+        if (result?.status && result.data) {
+          setProducts(result.data);
+        } else {
+          setError(result?.message || 'Error desconocido al obtener productos.');
+        }
+      } catch (err) {
+        console.error("Error al obtener productos:", err);
+        setError('Error al conectar con el servidor.');
+      } finally {
+        setLoadingProducts(false);
+      }
+    };
+
+
+    useEffect(() => {
+      fetchProducts()
+    }, [])
+    
   return (
     <div>
       <Navbar />
@@ -23,53 +59,8 @@ const LandingPage: React.FC = () => {
         <Typography variant="h4" component="h2" align="center" gutterBottom>
           Productos Destacados
         </Typography>
-        <Grid container spacing={4}>
-          <Grid item xs={12} sm={6} md={4}>
-            <Box
-              sx={{
-                p: 2,
-                border: "1px solid #ccc",
-                borderRadius: "4px",
-                textAlign: "center",
-              }}
-            >
-              <Typography variant="h6" component="h3" gutterBottom>
-                Sección 1
-              </Typography>
-              <Typography variant="body2">{loremIpsumShort}</Typography>
-            </Box>
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <Box
-              sx={{
-                p: 2,
-                border: "1px solid #ccc",
-                borderRadius: "4px",
-                textAlign: "center",
-              }}
-            >
-              <Typography variant="h6" component="h3" gutterBottom>
-                Sección 2
-              </Typography>
-              <Typography variant="body2">{loremIpsumShort}</Typography>
-            </Box>
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <Box
-              sx={{
-                p: 2,
-                border: "1px solid #ccc",
-                borderRadius: "4px",
-                textAlign: "center",
-              }}
-            >
-              <Typography variant="h6" component="h3" gutterBottom>
-                Sección 3
-              </Typography>
-              <Typography variant="body2">{loremIpsumShort}</Typography>
-            </Box>
-          </Grid>
-        </Grid>
+        <ProductList loading={loadingProducts} products={products} />
+       
       </Container>
     </div>
   );

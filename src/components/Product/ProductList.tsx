@@ -14,15 +14,14 @@ import { Product } from 'types';
 import APIService from 'services/Api';
 
 interface ProductListProps {
-  userId: string; // Recibe el ID del usuario para filtrar los productos
+  products: Product[]
+  loading: boolean
 }
 
-const ProductList: React.FC<ProductListProps> = ({ userId }) => {
+const ProductList: React.FC<ProductListProps> = ({ products,loading }) => {
   
-  const [products, setProducts] = useState<Product[] | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-
+/*
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
@@ -42,10 +41,10 @@ const ProductList: React.FC<ProductListProps> = ({ userId }) => {
         setLoading(false);
       }
     };
-
     fetchProducts();
   }, [userId]); // El useEffect se ejecuta cuando cambia el userId
-
+  
+  */
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}> {/* Centrado */}
@@ -59,16 +58,15 @@ const ProductList: React.FC<ProductListProps> = ({ userId }) => {
   }
 
   if (!products || products.length === 0) {
-    return <Typography variant="body1">No hay productos disponibles.</Typography>;
+    return <Typography sx={{width:'w-full',margin:'0 auto',textAlign:'center'}} variant="body1">No hay productos disponibles.</Typography>;
   }
 
   return (
-    <Grid container spacing={2}> {/* Usa Grid para el diseño */}
-
+    <Grid container spacing={2}> 
     <Box sx={{ width: '90%', margin: '0 auto', paddingTop:'4rem' }}>
  
       {products.map((product) => (
-          <Grid item xs={12} sm={6} md={3} key={product.id}> {/* Diseño responsive */}
+          <Grid item xs={12} sm={6} md={3} key={product.id}>  
             <Card>
               <CardMedia
                 component="img"
@@ -90,9 +88,6 @@ const ProductList: React.FC<ProductListProps> = ({ userId }) => {
             </Card>
           </Grid>
         ))}
-        
-
-
     </Box>
     </Grid>
   );

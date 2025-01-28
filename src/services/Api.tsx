@@ -6,11 +6,12 @@ export const endPoint = process.env.REACT_APP_API || "http://localhost:3000/api"
 
 interface IAPIService {
   getToken(): Promise<AuthResponse | undefined>;
-  getUsers(): Promise<User[] | undefined>;
+  getUsers(): Promise<any | undefined>;
   userRegister(userData: User): Promise<any | undefined>;
   userLogin(userData: any): Promise<any | undefined>;
   productCreate(product: Product): Promise<any | undefined>;
   productListByUser(userId: string): Promise<any | undefined>;
+  productListAll(body: any): Promise<any | undefined>;
 }
 
 const APIService: IAPIService = {
@@ -127,6 +128,27 @@ const APIService: IAPIService = {
   productListByUser: async (userId: string): Promise< any | undefined> => {
     try {
       const res = await axios.get<Product[]>(`${endPoint}/products/${userId}`, { // Usa GET y una ruta con el userId
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`, // Incluye el token si es necesario
+        },
+      });
+      return {status: true , data: res.data}
+    } catch (error: any) {
+      let message = ''
+      if (error?.response?.status === 401) {
+        // Manejar error de conflicto (correo electrónico duplicado)
+        message = 'Credenciales incorrectas.'
+      } else {
+        // Manejar otros errores
+        message = 'No es posible iniciar sesión'
+      }
+      return {status: false , message}
+    }
+  },
+  productListAll: async (body: any): Promise< any | undefined> => {
+    try {
+      const res = await axios.get<Product[]>(`${endPoint}/products`, { // Usa GET y una ruta con el userId
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`, // Incluye el token si es necesario
