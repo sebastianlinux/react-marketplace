@@ -146,33 +146,51 @@ Asegúrate de tener instalado lo siguiente en tu máquina:
 ##  6. Estructura del Proyecto <a name="6-estructura-del-proyecto"></a>
 
 ```markdown
-
-src/
-├── components/         # Componentes reutilizables
-│   ├── ProductCard.js
-│   ├── Navbar.js
-│   ├── ...
-├── pages/              # Páginas de la aplicación
-│   ├── Home.js
-│   ├── ProductDetails.js
-│   ├── Profile.js
-│   ├── ...
-├── context/            # Contexto global (si se usa Context API)
-│   └── AuthContext.js
-├── redux/              # Estado global (si se usa Redux)
-│   ├── actions/
-│   │   └── productActions.js
-│   ├── reducers/
-│   │   └── productReducer.js
-│   ├── store.js
-├── services/           # Servicios para interactuar con el backend
-│   └── productService.js
-├── App.js
-├── index.js
-└── ...
-public/
-└── index.html
-package.json
+.
+├── App.css
+├── App.tsx
+├── Layouts
+│   └── MainLayout.tsx
+├── Middleware
+│   └── ProtectedRouteRole.tsx
+├── components
+│   ├── Cart.tsx
+│   ├── Footer.tsx
+│   ├── Hero.tsx
+│   ├── LoginDialog.tsx
+│   ├── Navbar.tsx
+│   ├── Notify.tsx
+│   ├── Pagination.tsx
+│   ├── Product
+│   │   ├── AddProduct.tsx
+│   │   ├── ProductDetail.tsx
+│   │   └── ProductList.tsx
+│   ├── RegisterDialog.tsx
+│   ├── StarDisplay.tsx
+│   └── Users
+│       └── UsersList.tsx
+├── hooks.ts
+├── index.css
+├── index.tsx
+├── logo.svg
+├── pages
+│   ├── Admin
+│   │   ├── UserProduct.tsx
+│   │   └── UsersPage.tsx
+│   ├── LandingPage.tsx
+│   ├── OrderResumePage.tsx
+│   ├── ProfilePage.tsx
+│   ├── UnauthorizedPage.tsx
+│   └── UserProductsPage.tsx
+├── redux
+│   ├── authSlice.ts
+│   └── cartSlice.ts
+├── services
+│   └── Api.tsx
+├── setupTests.ts
+├── store.ts
+├── theme.ts
+└── types.tsx
 
 ```
 
