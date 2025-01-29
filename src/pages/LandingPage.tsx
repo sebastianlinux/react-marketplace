@@ -14,8 +14,7 @@ import { Product } from "types";
 import ProductList from "components/Product/ProductList";
 import MainLayout from "Layouts/MainLayout";
 import { useSelector } from "react-redux";
-import SearchIcon from "@mui/icons-material/Search";
-import ClearIcon from "@mui/icons-material/Clear";
+
 import { RootState } from "store";
 import ProductionQuantityLimitsIcon from "@mui/icons-material/ProductionQuantityLimits";
 import Paginacion from "components/Pagination";
@@ -28,7 +27,7 @@ const LandingPage: React.FC = () => {
   const [loadingProducts, setLoadingProducts] = useState(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
-  const [valueRanges, setValueRanges] = useState([20, 37]);
+  const [valueRanges, setValueRanges] = useState([0, 10000000000]);
   const [searchTerm, setSearchTerm] = useState<string>();
   /*usamos debounce para que no llame al 
   api cada vez que muevan el slider de rango de precios
@@ -42,20 +41,20 @@ const LandingPage: React.FC = () => {
   const { isAuthenticated, user } = useSelector(
     (state: RootState) => state.auth
   );
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
+ 
+  const handleSearchChange = (s :string) => {
+    setSearchTerm(s);
     setCurrentPage(1)
   };
 
-  const handleClearSearch = () => {
+/*   const handleClearSearch = () => {
     setSearchTerm("");
     setCurrentPage(1)
-  };
+  }; */
 
-  const handleChange = (event: Event, newValue: number | number[]) => {
+  const handleChangeRange = (event: Event, newValue: number | number[]) => {
     setValueRanges(newValue as number[]);
     setCurrentPage(1)
-    //fetchProducts()
   };
 
   const fetchProducts = async () => {
@@ -88,8 +87,8 @@ const LandingPage: React.FC = () => {
         console.log("min", result?.data?.minPrice);
         console.log("max", result?.data?.minPrice);
         setPriceRanges([
-          Number(result?.data?.minPrice),
-          Number(result?.data?.maxPrice),
+          Number(result?.data?.minPrice || 0),
+          Number(result?.data?.maxPrice || 100000),
         ]);
       } else {
         setError(result?.message || "Error desconocido al obtener productos.");
@@ -109,7 +108,8 @@ const LandingPage: React.FC = () => {
   }, [isAuthenticated, currentPage,debouncedRange,debouncedSearch]
   );
   const handlePage = (x: any, e: any) => {
-    setCurrentPage(e);
+    const p = parseInt(e) < 0 ? 1: parseInt(e) 
+    setCurrentPage(p);
   };
   return (
     <div>
@@ -154,43 +154,11 @@ const LandingPage: React.FC = () => {
           )}
           {isAuthenticated && (
             <>
-              <TextField
-                label="Buscar productos"
-                variant="outlined"
-                value={searchTerm}
-                disabled={loadingProducts}
-                onChange={handleSearchChange}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      {searchTerm && (
-                        <IconButton onClick={handleClearSearch}>
-                          <ClearIcon />
-                        </IconButton>
-                      )}
-                      <IconButton>
-                        <SearchIcon />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-                fullWidth // Para que ocupe todo el ancho disponible
-              />
-              <Box sx={{padding:'1rem'}}>Filtrar por rango de precio</Box>
-              <Box sx={{ width: 300 }}>
-                <Slider
-                  getAriaLabel={() => "Rango de precios"}
-                  value={valueRanges}
-                  onChange={handleChange}
-                  disabled={loadingProducts}
-                  valueLabelDisplay="auto"
-                  valueLabelFormat={valuetext}
-                  min={priceRanges[0] || 0}
-                  max={priceRanges[1] || 10000}
-                />
-              </Box>
+              
 
-              <ProductList loading={loadingProducts} products={products} />
+              <ProductList handleSearchChange={handleSearchChange} valueRanges={valueRanges}   onChangeRange={handleChangeRange}
+              min={priceRanges[0] || 0} max={priceRanges[1]||10000} 
+              loading={loadingProducts} products={products} />
 
               <Paginacion
                 page={currentPage}

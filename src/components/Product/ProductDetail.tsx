@@ -75,7 +75,7 @@ const ProductDetail: React.FC<ParamsProductDetail> = ({
             >
               <AccountCircleIcon sx={{ fontSize: 30, color: "white" }} />
             </Avatar>
-            <Typography variant="body1" component={Link} onClick={handleClose} to={`/admin/users/products/${product?.user?.id}`}>{product?.user?.name}</Typography>
+            <Typography variant="body1" component={Link} onClick={handleClose} to={`/user/products/${product?.user?.id}`}>{product?.user?.name}</Typography>
           </Box>
           <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
             <Typography variant="body1">código:</Typography>

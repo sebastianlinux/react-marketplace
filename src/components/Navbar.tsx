@@ -49,7 +49,7 @@ const Navbar: React.FC = () => {
   const pages: NavItem[] = [
     // Define las páginas de tu Navbar
     { label: "Inicio", path: "/", show: true },
-    { label: "Mis Productos", path: "/products", show: (isAuthenticated && (user?.role === 'vendedor')) },
+    { label: "Mis Productos", path: `/products`, show: (isAuthenticated && (user?.role === 'vendedor')) },
     { label: "Usuarios", path: "/admin/users", show: (isAuthenticated && (user?.role === 'admin')) },
     {
       label: "Iniciar sesión",
