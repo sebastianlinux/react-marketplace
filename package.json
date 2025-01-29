@@ -21,7 +21,8 @@
     "redux-persist": "^6.0.0",
     "serve": "^14.2.4",
     "typescript": "^4.8.2",
-    "use-debounce": "^10.0.4"
+    "use-debounce": "^10.0.4",
+    "web-vitals": "^4.2.4"
   },
   "scripts": {
     "start": "react-scripts start",

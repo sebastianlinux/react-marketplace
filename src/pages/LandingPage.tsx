@@ -99,7 +99,7 @@ const LandingPage: React.FC = () => {
     if (isAuthenticated) {
       fetchProducts();
     }
-  }, [isAuthenticated, currentPage,debouncedRange,debouncedSearch]
+  }, [isAuthenticated, currentPage,debouncedRange,debouncedSearch, user]
   );
   const handlePage = (x: any, e: any) => {
     const p = parseInt(e) < 0 ? 1: parseInt(e) 

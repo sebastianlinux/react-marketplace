@@ -11,15 +11,15 @@ import {
   Button,
   Badge,
 } from "@mui/material";
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'; // Importa el icono del carrito
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"; // Importa el icono del carrito
 import MenuIcon from "@mui/icons-material/Menu";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Link, useNavigate } from "react-router-dom"; // Importa Link para la navegación
 import RegisterDialog from "./RegisterDialog";
 import LoginDialog from "./LoginDialog";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "store";
-import { logout } from './../redux/authSlice';
+import { logout } from "./../redux/authSlice";
 import { selectCartItems } from "./../redux/cartSlice";
 import Cart from "./Cart";
 interface NavItem {
@@ -32,28 +32,38 @@ interface NavItem {
 const Navbar: React.FC = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [viewRegisterDialog, setViewRegisterDialog] = useState<boolean>(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [viewLoginDialog, setViewLoginDialog] = useState<boolean>(false);
-  const [newRegisterEmail, setNewRegisterEmail] = useState<string>('')
-  const [isCartOpen, setIsCartOpen] = useState<boolean>(false)
+  const [newRegisterEmail, setNewRegisterEmail] = useState<string>("");
+  const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
 
-  const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated, user } = useSelector(
+    (state: RootState) => state.auth
+  );
 
   const logoutUser = () => {
-    dispatch(logout())
-    navigate('/')
-  }
+    dispatch(logout());
+    navigate("/");
+  };
 
   const handleCartOpen = () => {
     setIsCartOpen(true);
   };
-  
+
   const pages: NavItem[] = [
     // Define las páginas de tu Navbar
     { label: "Inicio", path: "/", show: true },
-    { label: "Mis Productos", path: `/products`, show: (isAuthenticated && (user?.role === 'vendedor')) },
-    { label: "Usuarios", path: "/admin/users", show: (isAuthenticated && (user?.role === 'admin')) },
+    {
+      label: "Mis Productos",
+      path: `/products`,
+      show: isAuthenticated && user?.role === "vendedor",
+    },
+    {
+      label: "Usuarios",
+      path: "/admin/users",
+      show: isAuthenticated && user?.role === "admin",
+    },
     {
       label: "Iniciar sesión",
       path: "",
@@ -75,7 +85,6 @@ const Navbar: React.FC = () => {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
-
   const handleOpenDialog = (action: "register" | "login") => {
     handleCloseNavMenu();
     if (action === "register") {
@@ -86,22 +95,19 @@ const Navbar: React.FC = () => {
   };
   const cartItems = useSelector((state: RootState) => selectCartItems(state));
 
-  const handleCloseRegister = (email?:string) => {
-    setViewRegisterDialog(false)
-    setNewRegisterEmail(email || '')
-    if(email && email.length>0){
-      setViewLoginDialog(true)
+  const handleCloseRegister = (email?: string) => {
+    setViewRegisterDialog(false);
+    setNewRegisterEmail(email || "");
+    if (email && email.length > 0) {
+      setViewLoginDialog(true);
     }
-  }
+  };
 
   return (
     <>
-          <Cart open={isCartOpen} onClose={() => setIsCartOpen(false)} /> {/* Pasa isCartOpen como prop al componente Cart */}
-
-      <RegisterDialog
-        open={viewRegisterDialog}
-        onClose={ handleCloseRegister}
-      />
+      <Cart open={isCartOpen} onClose={() => setIsCartOpen(false)} />{" "}
+      {/* Pasa isCartOpen como prop al componente Cart */}
+      <RegisterDialog open={viewRegisterDialog} onClose={handleCloseRegister} />
       <LoginDialog
         open={viewLoginDialog}
         email={newRegisterEmail}
@@ -158,6 +164,18 @@ const Navbar: React.FC = () => {
                   display: { xs: "block", md: "none" },
                 }}
               >
+                {isAuthenticated && (
+                  <>
+                    <Button
+                      component={Link}
+                      to={"/profile"}
+                      sx={{ my: 2, color: "black", display: "flex" }}
+                    >
+                      <AccountCircleIcon />
+                      {user?.name}
+                    </Button>
+                  </>
+                )}
                 {pages
                   .filter((p) => p.show)
                   .map((page) => (
@@ -176,7 +194,7 @@ const Navbar: React.FC = () => {
                       ) : (
                         <MenuItem
                           key={page.label}
-                          onClick={() => handleCloseNavMenu}
+                          onClick={() => handleCloseNavMenu()}
                           component={Link}
                           to={page.path}
                         >
@@ -187,29 +205,18 @@ const Navbar: React.FC = () => {
                       )}
                     </React.Fragment>
                   ))}
-                          {isAuthenticated && (
-                <>
-                <Button 
-                                 component={Link}
-                                 to={'/profile'}
-                sx={{ my: 2, color: "black", display: "flex" }}>
-                  <AccountCircleIcon />
-                  {user?.name}
-                </Button>
-                <Button onClick={() => logoutUser()} sx={{ my: 2, color: "black", display: "block" }}>
-                  Cerrar sesión
-                </Button>
-                </>
-              )}
-                <IconButton color="inherit" onClick={() => handleCartOpen()} >  
-                <Badge badgeContent={cartItems.length} color="error"> {/* Badge con la cantidad */}
-                  <ShoppingCartIcon />
-                </Badge>
-              </IconButton>
+                {isAuthenticated && (
+                  <Button
+                    onClick={() => logoutUser()}
+                    sx={{ my: 2, color: "black", display: "block" }}
+                  >
+                    Cerrar sesión
+                  </Button>
+                )}
               </Menu>
             </Box>
             <Typography
-              variant="h5"
+              variant="h6"
               noWrap
               component="a"
               href=""
@@ -224,7 +231,14 @@ const Navbar: React.FC = () => {
                 textDecoration: "none",
               }}
             >
-              TU MARKETPLACE
+              TU MARKETPLACE{" "}
+              <IconButton color="inherit" onClick={() => handleCartOpen()}>
+                <Badge badgeContent={cartItems.length} color="error">
+                  {" "}
+                  {/* Badge con la cantidad */}
+                  <ShoppingCartIcon />
+                </Badge>
+              </IconButton>
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {" "}
@@ -249,7 +263,7 @@ const Navbar: React.FC = () => {
                       <Button
                         component={Link}
                         to={page.path}
-                        onClick={handleCloseNavMenu}
+                        onClick={() => handleCloseNavMenu()}
                         sx={{ my: 2, color: "white", display: "block" }}
                       >
                         {page.label}
@@ -259,20 +273,26 @@ const Navbar: React.FC = () => {
                 ))}
               {isAuthenticated && (
                 <>
-                <Button 
-                                 component={Link}
-                                 to={'/profile'}
-                sx={{ my: 2, color: "white", display: "flex" }}>
-                  <AccountCircleIcon />
-                  {user?.name}
-                </Button>
-                <Button onClick={() => logoutUser()} sx={{ my: 2, color: "white", display: "block" }}>
-                  Cerrar sesión
-                </Button>
+                  <Button
+                    component={Link}
+                    to={"/profile"}
+                    sx={{ my: 2, color: "white", display: "flex" }}
+                  >
+                    <AccountCircleIcon />
+                    {user?.name}
+                  </Button>
+                  <Button
+                    onClick={() => logoutUser()}
+                    sx={{ my: 2, color: "white", display: "block" }}
+                  >
+                    Cerrar sesión
+                  </Button>
                 </>
               )}
-                <IconButton color="inherit" onClick={() => handleCartOpen()} >  
-                <Badge badgeContent={cartItems.length} color="error"> {/* Badge con la cantidad */}
+              <IconButton color="inherit" onClick={() => handleCartOpen()}>
+                <Badge badgeContent={cartItems.length} color="error">
+                  {" "}
+                  {/* Badge con la cantidad */}
                   <ShoppingCartIcon />
                 </Badge>
               </IconButton>

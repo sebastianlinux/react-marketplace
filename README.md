@@ -6,6 +6,18 @@
 
 Este proyecto es un marketplace construido con ReactJS en el frontend y [especifica la tecnología del backend: NestJS, Express, etc.] en el backend. Permite a los usuarios [describe las funcionalidades principales del marketplace: navegar por productos, publicar anuncios, realizar compras, etc.].
 
+[![front1.png](https://i.postimg.cc/cHrsXbQW/front1.png)](https://postimg.cc/hzRWGMyZ)
+
+ [![front2.png](https://i.postimg.cc/yx0CG4xM/front2.png)](https://postimg.cc/JH7FyFbx)
+ 
+ 
+ 
+ [![Captura-de-pantalla-2025-01-29-a-la-s-3-10-29-p-m.png](https://i.postimg.cc/Kj78Cs8H/Captura-de-pantalla-2025-01-29-a-la-s-3-10-29-p-m.png)](https://postimg.cc/MfTwQ5R7)
+ 
+ [![Captura-de-pantalla-2025-01-29-a-la-s-3-38-24-p-m.png](https://i.postimg.cc/J7y6jDTv/Captura-de-pantalla-2025-01-29-a-la-s-3-38-24-p-m.png)](https://postimg.cc/MXSmSTJm)
+ 
+ [![Captura-de-pantalla-2025-01-29-a-la-s-3-13-03-p-m.png](https://i.postimg.cc/0yY0c8vY/Captura-de-pantalla-2025-01-29-a-la-s-3-13-03-p-m.png)](https://postimg.cc/mPr9rWtk)
+
 ##  Tabla de Contenidos
 
 1. [Introducción](#1-introducción)
@@ -61,21 +73,6 @@ Asegúrate de tener instalado lo siguiente en tu máquina:
     yarn install
     ```
 
-### Backend
-
-1.  Navega a la carpeta del backend:
-
-    ```bash
-    cd backend
-    ```
-
-2.  Instala las dependencias:
-
-    ```bash
-    npm install
-    # o
-    yarn install
-    ```
 
 ##  4. Configuración <a name="4-configuración"></a>
 
@@ -88,18 +85,9 @@ Asegúrate de tener instalado lo siguiente en tu máquina:
     *   `REACT_APP_API_URL`: URL base de la API del backend.
     *   Otras variables de entorno que tu proyecto requiera.
 
-### Backend
-
-1.  Crea un archivo `.env` en la raíz del backend y copia el contenido del archivo `.env.example`.
-
-2.  Configura las variables de entorno en el archivo `.env`:
-
-    *   `DATABASE_URL`: URL de conexión a la base de datos.
-    *   Otras variables de entorno que tu proyecto requiera.
 
 ##  5. Comandos <a name="5-comandos"></a>
 
-### Frontend
 
 *   Iniciar el servidor de desarrollo:
 
@@ -124,24 +112,7 @@ Asegúrate de tener instalado lo siguiente en tu máquina:
     # o
     yarn build
     ```
-
-### Backend
-
-*   Iniciar el servidor de desarrollo:
-
-    ```bash
-    npm run start
-    # o
-    yarn start
-    ```
-
-*   Ejecutar pruebas unitarias:
-
-    ```bash
-    npm test
-    # o
-    yarn test
-    ```
+ 
 
 ##  6. Estructura del Proyecto <a name="6-estructura-del-proyecto"></a>
 
