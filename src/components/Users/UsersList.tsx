@@ -21,17 +21,10 @@ type ParamsUserList = {
 };
 const UsersList: React.FC<ParamsUserList> = ({ users }) => {
   const [localSearch, setLocalSearch] = useState<string>("");
-  const [temporalUsers, setTemporalUsers] = useState<User[]>(users);
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setLocalSearch(value);
-    setTemporalUsers(
-      users.filter(
-        (u) =>
-          u.name.toLowerCase().includes(value.toLowerCase()) ||
-          u.email.toLowerCase().includes(value.toLowerCase())
-      )
-    );
+ 
   };
 
   return (

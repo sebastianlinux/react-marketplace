@@ -20,7 +20,7 @@ const ProductsPage = () => {
   const [totalPages, setTotalPages] = useState<number>(1);
 
   const [valueRanges, setValueRanges] = useState([0, 10000]);
-  const [error, setError] = useState<string | null>(null);
+  //const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>()
 
   const [debouncedRange] = useDebounce(valueRanges, 1000); 
@@ -31,7 +31,7 @@ const ProductsPage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
-      setError(null);
+      //setError(null);
 
       try {
         const result = await APIService.productListAll(
@@ -50,13 +50,13 @@ const ProductsPage = () => {
             Number(result?.data?.maxPrice || 100000),
           ]);
         } else {
-          setError(
+          /* setError(
             result?.message || "Error desconocido al obtener productos."
-          );
+          ); */
         }
       } catch (err) {
         console.error("Error al obtener productos:", err);
-        setError("Error al conectar con el servidor.");
+        /* setError("Error al conectar con el servidor."); */
       } finally {
         setLoading(false);
       }

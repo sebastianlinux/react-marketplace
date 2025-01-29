@@ -2,11 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   Container,
   Typography,
-  InputAdornment,
-  IconButton,
-  TextField,
-  Box,
-  Slider,
+
 } from "@mui/material";
 import Hero from "../components/Hero";
 import APIService from "services/Api";
@@ -23,7 +19,7 @@ import { useDebounce } from 'use-debounce';
 
 const LandingPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  //const [error, setError] = useState<string | null>(null);
   const [loadingProducts, setLoadingProducts] = useState(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
@@ -59,7 +55,7 @@ const LandingPage: React.FC = () => {
 
   const fetchProducts = async () => {
     setLoadingProducts(true);
-    setError(null);
+    //setError(null);
 
     try {
       let result: any = { status: false };
@@ -91,11 +87,11 @@ const LandingPage: React.FC = () => {
           Number(result?.data?.maxPrice || 100000),
         ]);
       } else {
-        setError(result?.message || "Error desconocido al obtener productos.");
+        //setError(result?.message || "Error desconocido al obtener productos.");
       }
     } catch (err) {
       console.error("Error al obtener productos:", err);
-      setError("Error al conectar con el servidor.");
+      //setError("Error al conectar con el servidor.");
     } finally {
       setLoadingProducts(false);
     }
@@ -173,8 +169,5 @@ const LandingPage: React.FC = () => {
   );
 };
 
-function valuetext(value: number) {
-  return `$${value}`;
-}
-
+ 
 export default LandingPage;

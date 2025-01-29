@@ -1,8 +1,6 @@
 import React from 'react';
-import { Box, Typography, Container, Button } from '@mui/material';
-import { Link } from "react-router-dom"; // Importa Link para la navegación
-import { useSelector } from 'react-redux';
-import { RootState } from 'store';
+import { Box, Typography, Container } from '@mui/material';
+ 
 interface HeroProps {
   title: string;
   description: string;
@@ -10,9 +8,9 @@ interface HeroProps {
   imageUrl?: string;
 }
 
-const Hero: React.FC<HeroProps> = ({ title, description, onButtonClick, imageUrl }) => {
+const Hero: React.FC<HeroProps> = ({ title, description, imageUrl }) => {
 
-  const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
+
   return (
     <Box
       sx={{

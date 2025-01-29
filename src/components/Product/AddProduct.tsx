@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
-import CloseIcon from '@mui/icons-material/Close';
 import {
   TextField,
   Button,
@@ -19,7 +17,6 @@ import { useSelector } from "react-redux";
 import { RootState } from "store";
 import APIService from "services/Api";
 import Notify from "components/Notify";
-import { Form } from "react-router-dom";
 
 interface AddProductDialogProps {
   open: boolean;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Navigate, Outlet, useLocation } from 'react-router-dom'; // Importa useLocation
+import { Navigate, useLocation } from 'react-router-dom'; // Importa useLocation
 import { RootState } from 'store';
 
 interface ProtectedRouteRoleProps {

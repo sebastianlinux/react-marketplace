@@ -1,5 +1,5 @@
 import axios from "axios";
-import { AuthResponse, Product, ProductResponse, User } from "types";
+import { Product, ProductResponse, User } from "types";
 
 export const endPoint = process.env.REACT_APP_API || "https://nest-marketplace.onrender.com"; // Añade /api al endpoint
 
@@ -106,7 +106,7 @@ const APIService: IAPIService = {
 
   productRemove:async(id:any): Promise<any | undefined> => {
     let url = `${endPoint}/products?id=${id}`; 
-    const res = await axios.delete<any>(url, { 
+     await axios.delete<any>(url, { 
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`, 

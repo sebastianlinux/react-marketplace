@@ -1,6 +1,5 @@
 import { Box, Grid } from "@mui/material";
 import MainLayout from "Layouts/MainLayout";
-import Navbar from "components/Navbar";
 import ProductList from "components/Product/ProductList";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -15,7 +14,6 @@ const AdminUserProductPage = () => {
   const { userId } = useParams();
   const [loading, setLoading] = useState<boolean>(false);
   const [products, setProducts] = useState<Product[]>([]);
-  const [error, setError] = useState<string | null>(null);
   const [priceRanges, setPriceRanges] = useState<number[]>([0, 10000]);
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -43,7 +41,7 @@ const AdminUserProductPage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
-      setError(null);
+      //setError(null);
 
       try {
         if (userId) {
@@ -62,14 +60,14 @@ const AdminUserProductPage = () => {
               Number(result?.data?.maxPrice || 100000),
             ]);
           } else {
-            setError(
+         /*    setError(
               result?.message || "Error desconocido al obtener productos."
-            );
+            ); */
           }
         }
       } catch (err) {
         console.error("Error al obtener productos:", err);
-        setError("Error al conectar con el servidor.");
+        //setError("Error al conectar con el servidor.");
       } finally {
         setLoading(false);
       }

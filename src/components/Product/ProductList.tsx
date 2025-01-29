@@ -5,7 +5,6 @@ import {
   CardMedia,
   CardContent,
   Typography,
-  CircularProgress,
   Box,
   Button,
   IconButton,
