@@ -24,7 +24,7 @@ const ProductsPage = () => {
       setError(null);
 
       try {
-        const result = await APIService.productListByUser(user?.id || '',currentPage-1);
+        const result = await APIService.productListAll(user?.id || '',currentPage-1);
         console.log('respuesta es ',result)
         if (result?.status && result.data) {
           setProducts(result.data?.products || []);

@@ -35,6 +35,7 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ open, onClose }) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
     setErrors({ ...errors, [event.target.name]: '' }); // Limpia el error al cambiar el valor
+    validateForm()
   };
 
   const validateForm = () => {
@@ -98,6 +99,7 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ open, onClose }) => {
               error={!!errors.email}
               helperText={errors.email}
             />
+            {errors.email}
           </Grid>
           <Grid item xs={12}>
             <TextField
@@ -117,7 +119,7 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ open, onClose }) => {
             {Object.keys(errors).length > 0 && (
                 <Grid item xs={12}>
                     <Typography color="error">
-                        Credenciales incorrectas
+                        Todos campos son obligatorios
                     </Typography>
                 </Grid>
             )}
@@ -129,7 +131,7 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ open, onClose }) => {
           <Button onClick={handleSubmit}>Iniciar Sesión</Button>
         </DialogActions>
       :
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <Box sx={{ display: 'flex',marginY:'2rem', justifyContent: 'center', alignItems: 'center' }}>
       <CircularProgress />
     </Box>
       }

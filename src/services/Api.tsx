@@ -10,8 +10,8 @@ interface IAPIService {
   userRegister(userData: User): Promise<any | undefined>;
   userLogin(userData: any): Promise<any | undefined>;
   productCreate(product: Product): Promise<any | undefined>;
-  productListByUser(userId: string,page:number,search?:string): Promise<any | undefined>;
-  productListAll(page:number,search?: string): Promise<any | undefined>;
+
+  productListAll(userId:string,page:number,minPrice?:number,maxPrice?:number,search?: string): Promise<any | undefined>;
 }
 
 const APIService: IAPIService = {
@@ -125,35 +125,16 @@ const APIService: IAPIService = {
       return {status: false , message}
     }
   },
-  productListByUser: async (userId: string,page:number, search?:string): Promise< any | undefined> => {
+ 
+  productListAll: async (userId:string,page:number,minPrice:number,maxPrice:number,search: string,): Promise< any | undefined> => {
     try {
-      let url = `${endPoint}/products?userId=${userId}&page=${page}`; 
-      if (search) {
-        url += `&productName=${encodeURIComponent(search)}`; 
+      let url = `${endPoint}/products?page=${page}`; 
+      if(userId.length > 0){
+        url += `&userId=${userId}`
       }
-
-      const res = await axios.get<ProductResponse>(url, { 
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`, 
-        },
-      });
-      return {status: true , data: res?.data}
-    } catch (error: any) {
-      let message = ''
-      if (error?.response?.status === 401) {
-        // Manejar error de conflicto (correo electrónico duplicado)
-        message = 'Credenciales incorrectas.'
-      } else {
-        // Manejar otros errores
-        message = 'No es posible iniciar sesión'
+      if(minPrice.toString().length > 0 && maxPrice.toString().length > 0){
+        url += `&minPrice=${minPrice}&maxPrice=${maxPrice}`;  
       }
-      return {status: false , message}
-    }
-  },
-  productListAll: async (page:number,search: string,): Promise< any | undefined> => {
-    try {
-      let url = `${endPoint}/products/all?page=${page}`; 
       if (search?.length > 0) {
         url += `&productName=${encodeURIComponent(search)}`; 
       }

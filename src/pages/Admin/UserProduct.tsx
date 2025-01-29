@@ -23,10 +23,10 @@ const AdminUserProductPage = () => {
 
       try {
         if (userId) {
-          const result = await APIService.productListByUser(
+          const result = await APIService.productListAll(
             userId || "",
             currentPage,
-            ""
+            0,0
           );
           if (result?.status && result.data) {
             setProducts(result?.data?.products || []);

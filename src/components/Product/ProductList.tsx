@@ -17,9 +17,10 @@ import Decimal from "decimal.js";
 import { useDispatch } from "react-redux";
 import { addItem } from "./../../redux/cartSlice";
 import Notify from "components/Notify";
-import { ToastContainer } from "react-toastify";
+import { useSelector } from "react-redux";
 import StarDisplay from "components/StarDisplay";
 import { Link } from "react-router-dom";
+import { RootState } from "store";
 interface ProductListProps {
   products: Product[];
   loading: boolean;
@@ -30,7 +31,9 @@ const ProductList: React.FC<ProductListProps> = ({ products, loading }) => {
   const [currentProduct, setCurrentProduct] = useState<Product>();
   const [error, setError] = useState<string | null>(null);
   const [viewDetail, setViewDetail] = useState<boolean>(false);
-
+  const { isAuthenticated, user } = useSelector(
+    (state: RootState) => state.auth
+  );
   const handleAddToCart = (product: Product) => {
     Notify("Añadido al carrito");
     dispatch(addItem(product)); // Dispara la acción addItem con el producto
@@ -67,6 +70,12 @@ const ProductList: React.FC<ProductListProps> = ({ products, loading }) => {
         sx={{ width: "w-full", margin: "0 auto", textAlign: "center" }}
         variant="body1"
       >
+        {
+          user?.role === 'vendedor' && 
+          <div>
+            No tienes productos en tu inventario. visita "mis productos" y presiona añadir producto para comenzar a vender.
+          </div>
+        }
         No hay productos disponibles.
       </Typography>
     );

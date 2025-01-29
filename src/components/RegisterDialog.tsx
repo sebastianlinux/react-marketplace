@@ -20,7 +20,10 @@ import CircularProgress from '@mui/material/CircularProgress';
 import APIService from "services/Api";
 import Notify from "./Notify";
 import { ToastContainer } from "react-toastify";
-
+import { User } from "../types";
+import {  AppDispatch } from './../store';
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from './../redux/authSlice'
 interface RegisterDialogProps {
   open: boolean;
   onClose: () => void
@@ -43,7 +46,7 @@ const RegisterDialog: React.FC<RegisterDialogProps> = ({
     setFormData({ ...formData, [event.target.name]: event.target.value });
     setErrors({ ...errors, [event.target.name]: "" });
   };
-
+  const dispatch = useDispatch<AppDispatch>();
   const handleSelectChange = (event: SelectChangeEvent<string>) => {
     setFormData({ ...formData, role: event.target.value }); // Acceso directo a event.target.value
     setErrors({ ...errors, role: "" });
@@ -90,9 +93,13 @@ const RegisterDialog: React.FC<RegisterDialogProps> = ({
       }
       delete dataToSend.confirmPassword
       const res = await APIService.userRegister({...dataToSend})
+      
       if(res.status){
       handleClose();
+      console.log('RESPUESTA DE EL REGISTRO ES ',res)
       Notify('Registro exitoso','success')
+      const user = {...res?.data} as User
+      dispatch(loginSuccess({user:user}))
        setFormData({
         name: "",
         email: "",
@@ -241,3 +248,4 @@ const RegisterDialog: React.FC<RegisterDialogProps> = ({
 };
 
 export default RegisterDialog;
+ 
