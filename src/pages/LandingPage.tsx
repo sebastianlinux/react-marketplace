@@ -72,19 +72,17 @@ const LandingPage: React.FC = () => {
         result = await APIService.productListAll(
           user?.id,
           currentPage - 1,
-          0,
-          0,
+          valueRanges[0],
+          valueRanges[1],
           searchTerm
         );
       }
       if (result?.status && result.data) {
         setProducts(result.data.products);
         setTotalPages(result.data.totalCount);
-        console.log("min", result?.data?.minPrice);
-        console.log("max", result?.data?.minPrice);
         setPriceRanges([
           Number(result?.data?.minPrice || 0),
-          Number(result?.data?.maxPrice || 100000),
+          Number(result?.data?.maxPrice || 10000000),
         ]);
       } else {
         //setError(result?.message || "Error desconocido al obtener productos.");
