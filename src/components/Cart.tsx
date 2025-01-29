@@ -50,7 +50,7 @@ const Cart: React.FC<Props> = ({ open, onClose }) => {
     <Drawer open={open} onClose={onClose} anchor="right">
       <Box
         sx={{
-          width: { xs: '100vw', sm: 400 }, // Ancho responsivo
+          width: { xs: '70vw', sm: 400 }, // Ancho responsivo
           padding: 2,
           display: 'flex',
           flexDirection: 'column',

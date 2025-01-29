@@ -217,7 +217,6 @@ const Navbar: React.FC = () => {
             </Box>
             <Box
               component="a"
-              href=""
               sx={{
                 mr: 2,
                 display: { xs: "flex", md: "none", alignItems:'center' }, // Mostrar en pantallas pequeñas
