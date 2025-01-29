@@ -69,8 +69,10 @@ const RegisterDialog: React.FC<RegisterDialogProps> = ({
 
     if (!formData.password) {
       newErrors.password = "La contraseña es requerida";
-    } else if (formData.password.length < 6) {
-      newErrors.password = "La contraseña debe tener al menos 6 caracteres";
+    } else if (formData.password.length <= 8) {
+      newErrors.password = "La contraseña debe tener al menos 8 caracteres";
+    }else if (formData.password.length >= 20) {
+      newErrors.password = "La contraseña debe tener máximo 20 caracteres";
     }
 
     if (formData.password !== formData.confirmPassword) {
@@ -196,6 +198,7 @@ const RegisterDialog: React.FC<RegisterDialogProps> = ({
                 label="Contraseña"
                 type="password"
                 fullWidth
+                inputProps={{ minLength: 8, maxLength: 20 }}
                 variant="outlined"
                 value={formData.password}
                 onChange={handleInputChange}
