@@ -87,6 +87,7 @@ const AddProduct: React.FC<AddProductDialogProps> = ({open,onClose}) => {
           status: "active",
           userId: user?.id || ""
         })
+        setFile(null)
         setSuccess(true);
       }else{
         Notify(res?.message,'error')
@@ -133,6 +134,7 @@ const AddProduct: React.FC<AddProductDialogProps> = ({open,onClose}) => {
             margin="normal"
             label="SKU"
             name="sku"
+            inputProps={{ maxLength: 7 }}
             value={product.sku}
             onChange={handleChange}
             required
@@ -140,6 +142,7 @@ const AddProduct: React.FC<AddProductDialogProps> = ({open,onClose}) => {
           <TextField
             fullWidth
             margin="normal"
+            inputProps={{ maxLength: 50}}
             label="Nombre"
             name="name"
             value={product.name}
@@ -150,6 +153,7 @@ const AddProduct: React.FC<AddProductDialogProps> = ({open,onClose}) => {
             fullWidth
             margin="normal"
             label="Descripción"
+            inputProps={{ maxLength:190}}
             name="description"
             value={product.description}
             onChange={handleChange}

@@ -11,6 +11,7 @@ import {
   Slider,
   TextField,
   InputAdornment,
+  Skeleton,
 } from "@mui/material"; // Importaciones de Material UI
 
 import { Product } from "types";
@@ -169,75 +170,95 @@ const ProductList: React.FC<ProductListProps> = ({
             gap: 0,
           }}
         >
-          {products.map((product) => (
-            <Grid sx={{ p: 1 }} item xs={12} sm={6} md={3} key={product.id}>
-              <Card>
-                <CardMedia
-                  component="img"
-                  height="300"
-                  image={`${process.env.REACT_APP_API}/${product.photoUrl}`}
-                  alt={product.name}
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    {product.name}
-                  </Typography>
-                  <StarDisplay />
-                  <Typography variant="body2" color="text.secondary">
-                    {product?.description?.toLowerCase()}
-                  </Typography>
-                  <Typography variant="body1" color="text.primary">
-                    ${new Decimal(product.price).toFixed(2)}
-                  </Typography>
-                  {product?.user && (
-                    <Box>
-                      Vendedor
-                      <Box
-                        sx={{
-                          fontWeight: "medium",
-                          paddingY: ".3rem",
-                          fontSize: ".9rem",
-                          backgroundColor: "#e8e8e8",
-                          width: "fit-content",
-                          borderRadius: ".5rem",
-                          display: "flex",
-                          padding: ".4rem",
-                          marginY: ".4rem",
-                          textDecoration: "none",
-                          color: "#333",
-                        }}
-                        component={Link}
-                        to={`/user/products/${product.user.id}`}
-                      >
-                        {product?.user?.name?.toLowerCase()}
+          {loading ?
+              Array.from(new Array(8)).map((item, index) => ( // Ajusta el número 8 según la cantidad de skeletons que quieras mostrar
+              <Grid sx={{ p: 1 }} item xs={12} sm={6} md={3} key={index}>
+                <Card>
+                  <Skeleton variant="rectangular" height={300} />
+                  <CardContent>
+                    <Skeleton variant="text" />
+                    <Skeleton variant="text" />
+                    <Skeleton variant="text" />
+                    <Skeleton variant="text" />
+                    <Skeleton variant="text" />
+                    <Skeleton variant="rectangular" width="fit-content" /> {/* Skeleton para el vendedor */}
+                    <Skeleton variant="rectangular" />
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))
+            :
+            products.map((product) => (
+              <Grid sx={{ p: 1 }} item xs={12} sm={6} md={3} key={product.id}>
+                <Card>
+                  <CardMedia
+                    component="img"
+                    height="300"
+                    image={`${process.env.REACT_APP_API}/${product.photoUrl}`}
+                    alt={product.name}
+                  />
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
+                      {product.name}
+                    </Typography>
+                    <StarDisplay />
+                    <Typography variant="body2" color="text.secondary">
+                      {product?.description?.toLowerCase()}
+                    </Typography>
+                    <Typography variant="body1" color="text.primary">
+                      ${new Decimal(product.price).toFixed(2)}
+                    </Typography>
+                    {product?.user && (
+                      <Box>
+                        Vendedor
+                        <Box
+                          sx={{
+                            fontWeight: "medium",
+                            paddingY: ".3rem",
+                            fontSize: ".9rem",
+                            backgroundColor: "#e8e8e8",
+                            width: "fit-content",
+                            borderRadius: ".5rem",
+                            display: "flex",
+                            padding: ".4rem",
+                            marginY: ".4rem",
+                            textDecoration: "none",
+                            color: "#333",
+                          }}
+                          component={Link}
+                          to={`/user/products/${product.user.id}`}
+                        >
+                          {product?.user?.name?.toLowerCase()}
+                        </Box>
                       </Box>
-                    </Box>
-                  )}
-                  <Button
-                    variant="contained"
-                    onClick={() => handleDetail(product)}
-                  >
-                    Ver Detalle
-                  </Button>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      marginTop: ".4rem",
-                    }}
-                  >
+                    )}
                     <Button
                       variant="contained"
-                      startIcon={<AddShoppingCartIcon />}
-                      onClick={() => handleAddToCart(product)}
+                      onClick={() => handleDetail(product)}
                     >
-                      Añadir al carrito
+                      Ver Detalle
                     </Button>
-                  </Box>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginTop: ".4rem",
+                      }}
+                    >
+                      <Button
+                        variant="contained"
+                        startIcon={<AddShoppingCartIcon />}
+                        onClick={() => handleAddToCart(product)}
+                      >
+                        Añadir al carrito
+                      </Button>
+                    </Box>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))
+          }
+
         </Box>
       </Grid>
     </>
