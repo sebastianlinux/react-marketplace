@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   TextField,
@@ -20,18 +20,23 @@ import { User } from 'types';
 interface LoginDialogProps {
   open: boolean;
   onClose: () => void;
+  email?:string
 }
 
-const LoginDialog: React.FC<LoginDialogProps> = ({ open, onClose }) => {
+const LoginDialog: React.FC<LoginDialogProps> = ({ open,email, onClose }) => {
   const dispatch = useDispatch<AppDispatch>();
-
   const [formData, setFormData] = useState({
-    email: '',
+    email: email || '',
     password: '',
   });
   const [loading, setLoading] = useState<boolean>(false)
   const [errors, setErrors] = useState({} as any);
-
+  useEffect(() => {
+    if(email && email.length > 0){
+      setFormData({email,password:''})
+    }
+  }, [email])
+  
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
     setErrors({ ...errors, [event.target.name]: '' }); // Limpia el error al cambiar el valor
@@ -63,9 +68,12 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ open, onClose }) => {
         handleClose();
         setFormData({ email: '', password: '' });
         setErrors({});
-        Notify('Login éxitoso','success')
+        Notify('Login exitoso','success')
         const user = {...res?.data?.user} as User
+        console.log('TOKEN es' ,user?.token)
+        localStorage.setItem("accessToken",user?.token || '')
         dispatch(loginSuccess({user:user}))
+        console.log('datos del user ',user)
       }else{
         Notify(res?.message,'error')
       }

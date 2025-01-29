@@ -14,7 +14,7 @@ import {
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'; // Importa el icono del carrito
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { Link } from "react-router-dom"; // Importa Link para la navegación
+import { Link, useNavigate } from "react-router-dom"; // Importa Link para la navegación
 import RegisterDialog from "./RegisterDialog";
 import LoginDialog from "./LoginDialog";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,7 +32,9 @@ interface NavItem {
 const Navbar: React.FC = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [viewRegisterDialog, setViewRegisterDialog] = useState<boolean>(false);
+  const navigate = useNavigate()
   const [viewLoginDialog, setViewLoginDialog] = useState<boolean>(false);
+  const [newRegisterEmail, setNewRegisterEmail] = useState<string>('')
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false)
   const dispatch = useDispatch<AppDispatch>();
 
@@ -40,6 +42,7 @@ const Navbar: React.FC = () => {
 
   const logoutUser = () => {
     dispatch(logout())
+    navigate('/')
   }
 
   const handleCartOpen = () => {
@@ -83,6 +86,13 @@ const Navbar: React.FC = () => {
   };
   const cartItems = useSelector((state: RootState) => selectCartItems(state));
 
+  const handleCloseRegister = (email?:string) => {
+    setViewRegisterDialog(false)
+    setNewRegisterEmail(email || '')
+    if(email && email.length>0){
+      setViewLoginDialog(true)
+    }
+  }
 
   return (
     <>
@@ -90,10 +100,11 @@ const Navbar: React.FC = () => {
 
       <RegisterDialog
         open={viewRegisterDialog}
-        onClose={() => setViewRegisterDialog(false)}
+        onClose={ handleCloseRegister}
       />
       <LoginDialog
         open={viewLoginDialog}
+        email={newRegisterEmail}
         onClose={() => setViewLoginDialog(false)}
       />
       <AppBar position="fixed">

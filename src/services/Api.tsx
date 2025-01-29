@@ -5,39 +5,16 @@ export const endPoint = process.env.REACT_APP_API || "http://localhost:3000/api"
 
 
 interface IAPIService {
-  getToken(): Promise<AuthResponse | undefined>;
   getUsers(): Promise<any | undefined>;
   userRegister(userData: User): Promise<any | undefined>;
   userLogin(userData: any): Promise<any | undefined>;
   productCreate(product: Product): Promise<any | undefined>;
-
+  productRemove(id: any): Promise<any | undefined>;
   productListAll(userId:string,page:number,minPrice?:number,maxPrice?:number,search?: string): Promise<any | undefined>;
 }
 
 const APIService: IAPIService = {
-  getToken: async (): Promise<AuthResponse | undefined> => {
-    try {
-      const res = await axios.get<AuthResponse>(`${endPoint}/v1/isf/generate-access-token`, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      });
-      localStorage.setItem("accessToken", res.data.accessToken);
-      return res.data;
-    } catch (error: any) {
-      if (error.response?.status === 409) {
-        // Manejar error de conflicto (correo electrónico duplicado)
-        alert(error.response.data.message); // Muestra el mensaje del backend al usuario
-      } else if (error.response?.status === 500) {
-        // Manejar error interno del servidor
-        alert('Ocurrió un error en el servidor. Inténtelo nuevamente más tarde.');
-      } else {
-        // Manejar otros errores
-        alert('Ocurrió un error inesperado.');
-      }
-    }
-  },
+ 
 
   getUsers: async (): Promise<User[] | undefined> => {
     try {
@@ -110,6 +87,7 @@ const APIService: IAPIService = {
       const res = await axios.post<Product>(`${endPoint}/products`, product, { 
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`, 
         },
       });
       return {status: true , data: res.data}
@@ -125,6 +103,17 @@ const APIService: IAPIService = {
       return {status: false , message}
     }
   },
+
+  productRemove:async(id:any): Promise<any | undefined> => {
+    let url = `${endPoint}/products?id=${id}`; 
+    const res = await axios.delete<any>(url, { 
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`, 
+      },
+    });
+  },
+
  
   productListAll: async (userId:string,page:number,minPrice:number,maxPrice:number,search: string,): Promise< any | undefined> => {
     try {

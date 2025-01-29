@@ -54,7 +54,7 @@ const ProductList: React.FC<ProductListProps> = ({
   const { user } = useSelector((state: RootState) => state.auth);
   const [localSearch, setLocalSearch] = useState<string>('');
   const handleAddToCart = (product: Product) => {
-    Notify("Añadido al carrito");
+    Notify("Añadido al carrito",'success');
     dispatch(addItem(product)); // Dispara la acción addItem con el producto
   };
   const [ debouncedSearch ] = useDebounce(localSearch,1000)
@@ -208,7 +208,7 @@ const ProductList: React.FC<ProductListProps> = ({
                           color: "#333",
                         }}
                         component={Link}
-                        to={`/admin/users/products/${product.user.id}`}
+                        to={`/user/products/${product.user.id}`}
                       >
                         {product?.user?.name?.toLowerCase()}
                       </Box>

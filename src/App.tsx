@@ -35,13 +35,35 @@ function App() {
             }
           />
 
-          <Route path="/unauthorized" element={<UnauthorizedPage />} />
+          <Route path="/unauthorized" element={
+          
+          <ProtectedRouteRole
+          allowedRoles={["admin","vendedor","comprador"]}
+          element={<UnauthorizedPage />}
+        />
+
+          
+        
+        }/>
 
           <Route path="/order-resume" element={<OrderResumePage />} />
-          <Route path="/admin/users" element={<AdminUsersPage />} />
+          <Route path="/admin/users" 
+          element={
+            <ProtectedRouteRole
+              allowedRoles={["admin"]}
+              element={<AdminUsersPage />}
+            />
+          }
+       />
           <Route
             path="/user/products/:userId"
-            element={<AdminUserProductPage />}
+            element={
+              <ProtectedRouteRole
+              allowedRoles={["admin","vendedor","comprador"]}
+              element={<AdminUserProductPage/>}
+            />
+              
+             }
           />
           {/*           <Route path="/product/:id" element={<ProductDetails />} /> {/* Ruta con parámetro }
           <Route path="*" element={<NotFound />} /> {/* Ruta para cualquier otra ruta (404) } */}

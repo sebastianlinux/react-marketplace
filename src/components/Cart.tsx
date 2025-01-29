@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Link } from 'react-router-dom';
+import Notify from './Notify';
 
 interface CartItem {
   id: string;
@@ -32,6 +33,7 @@ const Cart: React.FC<Props> = ({ open, onClose }) => {
 
   const handleRemoveItem = (id: string) => {
     dispatch(removeItem(id));
+    Notify('Producto removido')
   };
 
   const handleUpdateQuantity = (id: string, quantity: number) => {

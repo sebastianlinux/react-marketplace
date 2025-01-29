@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 const Notify = (text: string, type?: string, position?:any) => {
   if (!type) {
     toast.info(`${text}`, {
-      position: position || "top-right",
+      position: position || "bottom-center",
       autoClose: 5000,
       hideProgressBar: false,
       closeOnClick: true,
@@ -15,7 +15,7 @@ const Notify = (text: string, type?: string, position?:any) => {
     });
   }else if(type === 'warning'){
     toast.warning(`${text}`, {
-      position: position || "top-right",
+      position: position || "bottom-center",
       autoClose: 5000,
       hideProgressBar: false,
       closeOnClick: true,
@@ -26,7 +26,7 @@ const Notify = (text: string, type?: string, position?:any) => {
     });
   }else if(type === 'success'){
     toast.success(`${text}`, {
-      position: position || "top-right",
+      position: position || "bottom-center",
       autoClose: 5000,
       hideProgressBar: false,
       closeOnClick: true,
@@ -37,7 +37,7 @@ const Notify = (text: string, type?: string, position?:any) => {
     });
   }else if(type === 'error'){
     toast.error(`${text}`, {
-      position: position || "top-right",
+      position: position || "bottom-center",
       autoClose: 5000,
       hideProgressBar: false,
       closeOnClick: true,

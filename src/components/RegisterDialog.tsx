@@ -26,7 +26,7 @@ import { useDispatch } from 'react-redux';
 import { loginSuccess } from './../redux/authSlice'
 interface RegisterDialogProps {
   open: boolean;
-  onClose: () => void
+  onClose: (email?:string) => void
 }
 
 const RegisterDialog: React.FC<RegisterDialogProps> = ({
@@ -95,8 +95,7 @@ const RegisterDialog: React.FC<RegisterDialogProps> = ({
       const res = await APIService.userRegister({...dataToSend})
       
       if(res.status){
-      handleClose();
-      console.log('RESPUESTA DE EL REGISTRO ES ',res)
+      handleClose(dataToSend.email);
       Notify('Registro exitoso','success')
       const user = {...res?.data} as User
       dispatch(loginSuccess({user:user}))
@@ -116,8 +115,8 @@ const RegisterDialog: React.FC<RegisterDialogProps> = ({
     }
   };
 
-  const handleClose = () => {
-    onClose();
+  const handleClose = (email?:string) => {
+    onClose(email);
     setFormData({
       name: "",
       email: "",
@@ -130,7 +129,7 @@ const RegisterDialog: React.FC<RegisterDialogProps> = ({
 
   return (
     <>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={() => handleClose('')}>
         <DialogTitle>Registro de usuario</DialogTitle>
         <DialogContent>
           <Grid container spacing={2} sx={{ mt: 2 }}>
@@ -224,7 +223,7 @@ const RegisterDialog: React.FC<RegisterDialogProps> = ({
         {!loading ? 
         <>
         <DialogActions sx={{ p: 2 }}>
-          <Button onClick={handleClose}>Cancelar</Button>
+          <Button onClick={() => handleClose('')}>Cancelar</Button>
           <Button onClick={handleSubmit}>Registrar</Button>
         </DialogActions>
         </>  
