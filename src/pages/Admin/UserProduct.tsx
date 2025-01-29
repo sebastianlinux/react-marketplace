@@ -76,7 +76,7 @@ const AdminUserProductPage = () => {
     };
 
     fetchProducts();
-  }, [userId,debouncedRange,debouncedSearch,searchTerm]); // El useEffect se ejecuta cuando cambia el userId
+  }, [userId,currentPage,debouncedRange,debouncedSearch,searchTerm]); // El useEffect se ejecuta cuando cambia el userId
 
   return (
     <div>

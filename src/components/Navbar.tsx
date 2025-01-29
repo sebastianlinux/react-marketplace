@@ -176,7 +176,25 @@ const Navbar: React.FC = () => {
                       )}
                     </React.Fragment>
                   ))}
-            
+                          {isAuthenticated && (
+                <>
+                <Button 
+                                 component={Link}
+                                 to={'/profile'}
+                sx={{ my: 2, color: "black", display: "flex" }}>
+                  <AccountCircleIcon />
+                  {user?.name}
+                </Button>
+                <Button onClick={() => logoutUser()} sx={{ my: 2, color: "black", display: "block" }}>
+                  Cerrar sesión
+                </Button>
+                </>
+              )}
+                <IconButton color="inherit" onClick={() => handleCartOpen()} >  
+                <Badge badgeContent={cartItems.length} color="error"> {/* Badge con la cantidad */}
+                  <ShoppingCartIcon />
+                </Badge>
+              </IconButton>
               </Menu>
             </Box>
             <Typography
