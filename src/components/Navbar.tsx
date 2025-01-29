@@ -215,23 +215,22 @@ const Navbar: React.FC = () => {
                 )}
               </Menu>
             </Box>
-            <Typography
-              variant="h6"
-              noWrap
+            <Box
               component="a"
               href=""
               sx={{
                 mr: 2,
-                display: { xs: "flex", md: "none" }, // Mostrar en pantallas pequeñas
+                display: { xs: "flex", md: "none", alignItems:'center' }, // Mostrar en pantallas pequeñas
                 flexGrow: 1,
                 fontFamily: "monospace",
                 fontWeight: 700,
                 letterSpacing: ".3rem",
+                fontSize:'1.1rem',
                 color: "inherit",
                 textDecoration: "none",
               }}
             >
-              TU MARKETPLACE{" "}
+              TU MARKETPLACE
               <IconButton color="inherit" onClick={() => handleCartOpen()}>
                 <Badge badgeContent={cartItems.length} color="error">
                   {" "}
@@ -239,7 +238,7 @@ const Navbar: React.FC = () => {
                   <ShoppingCartIcon />
                 </Badge>
               </IconButton>
-            </Typography>
+            </Box>
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {" "}
               {/* Menú de escritorio */}
