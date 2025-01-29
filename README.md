@@ -1,46 +1,119 @@
-# Getting Started with Create React App
+# Proyecto ReactJS Marketplace
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Este proyecto es un marketplace construido con ReactJS que consume un backend [especifica la tecnología del backend: NestJS, Express, etc.]. Permite a los usuarios [describe las funcionalidades principales del marketplace: navegar por productos, publicar anuncios, realizar compras, etc.].
 
-## Available Scripts
+## Tabla de Contenidos
 
-In the project directory, you can run:
+1. Introducción
+2. Pre-requisitos
+3. Instalación
+4. Configuración
+5. Comandos
+6. Estructura del Proyecto
+7. Componentes Principales
+8. Flujo de la Aplicación
+9. Integración con el Backend
+10. Consideraciones de Diseño
+11. Pruebas
+12. Despliegue
+13. Consejos Adicionales
 
-### `npm start`
+## 1. Introducción
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Proposito del aplicativo, permitir a los usuarios vender y registrarse en la plataforma. ver el listado de productos y sus detalles. crear productos y buscadores.
+tecnologías principales utilizadas (ReactJS, Redux/Context API, [librerías de MUI.], [librerías de peticiones HTTP: Axios, Fetch API,])
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## 2. Pre-requisitos
 
-### `npm test`
+Lista de software que necesitas tener instalado en tu máquina para poder ejecutar el proyecto:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+* Node.js (versión recomendada: v16 o superior)
+* npm o yarn
 
-### `npm run build`
+## 3. Instalación
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+npm install
+### o
+yarn install
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 4. Configuración
+Crea un archivo .env en la raíz del proyecto y copia el contenido del archivo .env.example.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Configura las variables de entorno en el archivo .env:
 
-### `npm run eject`
+REACT_APP_API_URL: URL base de la API del backend.
+Otras variables de entorno que tu proyecto requiera.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Construir la aplicación para producción:
+npm run build
+yarn build
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 6. Estructura del Proyecto
+src/
+├── components/         # Componentes reutilizables
+│   ├── ProductCard.js
+│   ├── Navbar.js
+│   ├── ...
+├── pages/              # Páginas de la aplicación
+│   ├── Home.js
+│   ├── ProductDetails.js
+│   ├── Profile.js
+│   ├── ...
+├── context/            # Contexto global (si se usa Context API)
+│   └── AuthContext.js
+├── redux/              # Estado global (si se usa Redux)
+│   ├── actions/
+│   │   └── productActions.js
+│   ├── reducers/
+│   │   └── productReducer.js
+│   ├── store.js
+├── services/           # Servicios para interactuar con el backend
+│   └── productService.js
+├── App.js
+├── index.js
+└── ...
+public/
+└── index.html
+package.json
+...
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## 7. Componentes Principales
+ProductCard: Muestra la información de un producto en forma de tarjeta.
+Navbar: Barra de navegación con enlaces a las diferentes secciones del marketplace.
+Home: Página principal con la lista de productos.
+ProductDetails: Página con los detalles de un producto específico.
+Profile: Página de perfil del usuario.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## 8. Flujo de la Aplicación
+El usuario inicia sesión para poder ver los productos de los vendedores.
+El vendedor debe iniciar sesión para añadir sus productos.
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 9. Integración con el Backend
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+// Ejemplo de petición GET para obtener productos
+import axios from 'axios';
+
+const getProducts = async () => {
+  try {
+    const response = await axios.get(`${process.env.REACT_APP_API_URL}/products`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
+
+## 10. Consideraciones de Diseño
+Diseño Responsivo - css MUI utilizado para mejorar la experiencia de usuario.
+
+## 11. Pruebas
+Pruebas unitarias realizadas.
+
+## 12. Despliegue
+El aplicativo puede ser desplegado con el build, en cualquier servidor. nginx, amazon, render etc.
+
+## 13. Consejos Adicionales
+Mantener al día las dependencias. moment js, use-debounce. 
+ 
+

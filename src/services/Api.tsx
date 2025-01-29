@@ -1,7 +1,7 @@
 import axios from "axios";
 import { AuthResponse, Product, ProductResponse, User } from "types";
 
-export const endPoint = process.env.REACT_APP_API || "http://localhost:3000/api"; // Añade /api al endpoint
+export const endPoint = process.env.REACT_APP_API || "https://nest-marketplace.onrender.com"; // Añade /api al endpoint
 
 
 interface IAPIService {
