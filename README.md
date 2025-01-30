@@ -200,7 +200,6 @@ Asegúrate de tener instalado lo siguiente en tu máquina:
 *   **`Home`**: Página principal con la lista de productos.
 *   **`ProductDetails`**: Página con los detalles de un producto específico.
 *   **`Profile`**: Página de perfil del usuario.
-*   [Añade aquí otros componentes importantes]
 
 ##  8. Flujo de la Aplicación <a name="8-flujo-de-la-aplicación"></a>
 
